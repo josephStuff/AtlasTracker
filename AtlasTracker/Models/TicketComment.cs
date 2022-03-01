@@ -8,7 +8,7 @@ namespace AtlasTracker.Models
         public int Id { get; set; }
 
         [Required]
-        [StringLength(25, ErrorMessage = "The {0} must be at least {2} at most {1} characters long.", MinimumLength = 2)]
+        [StringLength(2000)]
         [DisplayName("Member Comment")]        
         public string? Comment { get; set; }
 
