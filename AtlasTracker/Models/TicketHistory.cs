@@ -35,8 +35,7 @@ namespace AtlasTracker.Models
         [Required]
         public string? UserId { get; set; }
 
-
-        
+                
 
         // ------ NAVIGATION PROPERITES --------------------- <
 

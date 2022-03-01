@@ -3,13 +3,12 @@ using System.ComponentModel.DataAnnotations;
 
 namespace AtlasTracker.Models
 {
-    public class TicketPriority
+    public class NotificationType
     {
         public int Id { get; set; }
 
         [Required]
-        [StringLength(500)]
-        [DisplayName("Ticket Priority")]
+        [DisplayName("Notification Type")]
         public string? Name { get; set; }
 
 
