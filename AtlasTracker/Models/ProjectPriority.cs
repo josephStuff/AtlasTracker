@@ -9,7 +9,7 @@ namespace AtlasTracker.Models
 
         [Required]
         [StringLength(500)]
-        [DisplayName("Project Priority")]
+        [DisplayName("Project Name")]
         public string? Name { get; set; }
 
 

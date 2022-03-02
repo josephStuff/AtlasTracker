@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace AtlasTracker.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20220301225634_Initial_004")]
-    partial class Initial_004
+    [Migration("20220302175935_Initial_001")]
+    partial class Initial_001
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -296,10 +296,10 @@ namespace AtlasTracker.Data.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasMaxLength(25)
-                        .HasColumnType("character varying(25)");
+                        .HasMaxLength(240)
+                        .HasColumnType("character varying(240)");
 
-                    b.Property<int?>("ProjectPriorityId")
+                    b.Property<int>("ProjectPriorityId")
                         .HasColumnType("integer");
 
                     b.Property<DateTime>("StartDate")
@@ -799,7 +799,9 @@ namespace AtlasTracker.Data.Migrations
 
                     b.HasOne("AtlasTracker.Models.ProjectPriority", "ProjectPriority")
                         .WithMany()
-                        .HasForeignKey("ProjectPriorityId");
+                        .HasForeignKey("ProjectPriorityId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Company");
 

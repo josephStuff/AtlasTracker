@@ -4,7 +4,7 @@
 
 namespace AtlasTracker.Data.Migrations
 {
-    public partial class Initial_004 : Migration
+    public partial class Another_003 : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
