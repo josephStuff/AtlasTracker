@@ -6,7 +6,6 @@ namespace AtlasTracker.Services.Interfaces
     public interface IBTRolesService
     {
 
-
         public Task<bool> AddUserToRoleAsync(BTUser user, string roleName);
 
         public Task<string> GetRoleNameByIdAsync(string roleId);
@@ -16,7 +15,7 @@ namespace AtlasTracker.Services.Interfaces
 
         public Task<List<BTUser>> GetUsersNotInRoleAsync(string roleName, int companyId);
 
-        public async Task<bool> IsUserInRoleAsync(BTUser user, string roleName);
+        public Task<bool> IsUserInRoleAsync(BTUser user, string roleName);
         public Task<bool> RemoveUserFromRoleAsync(BTUser user, string roleName);
         public Task<bool> RemoveUserFromRolesAsync(BTUser user, IEnumerable<string> roles);
 
