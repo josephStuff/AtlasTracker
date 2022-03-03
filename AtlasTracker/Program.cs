@@ -1,5 +1,7 @@
 using AtlasTracker.Data;
 using AtlasTracker.Models;
+using AtlasTracker.Services;
+using AtlasTracker.Services.Interfaces;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -22,6 +24,7 @@ builder.Services.AddIdentity<BTUser, IdentityRole>(options => options.SignIn.Req
 
 // ----------------- CUSTOM SERVICES ----------------------- <
 
+builder.Services.AddScoped<IBTCompanyInfoService, BTCompanyInfoService>();
 
 builder.Services.AddMvc();
 
@@ -29,7 +32,6 @@ var app = builder.Build();
 
 var scope = app.Services.CreateScope();
 await DataUtility.ManageDataAsync(scope.ServiceProvider);
-
 
 
 // Configure the HTTP request pipeline.
