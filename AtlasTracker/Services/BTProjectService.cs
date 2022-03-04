@@ -115,7 +115,8 @@ namespace AtlasTracker.Services
         {
             try
             {
-
+                List<BTUser> bTUsers = new List<BTUser>();
+                return bTUsers;
             }
 
             catch (Exception)
@@ -130,7 +131,7 @@ namespace AtlasTracker.Services
         {
             try
             {
-
+                //List<Project> projects =
             }
 
             catch (Exception)
