@@ -22,10 +22,10 @@ namespace AtlasTracker.Services
             try
             {
                 invites = (await _context.Companies.Include(c => c.Invites)!.ThenInclude(i => i.Company)
-                                                    .Include(c => c.Invites)!.ThenInclude(i => i.Project)
-                                                    .Include(c => c.Invites)!.ThenInclude(i => i.Invitee)
-                                                    .Include(c => c.Invites)!.ThenInclude(i => i.Invitor)
-                                                    .FirstOrDefaultAsync(c => c.Id == companyId))?.Invites!.ToList();
+                                                   .Include(c => c.Invites)!.ThenInclude(i => i.Project)
+                                                   .Include(c => c.Invites)!.ThenInclude(i => i.Invitee)
+                                                   .Include(c => c.Invites)!.ThenInclude(i => i.Invitor)
+                                                   .FirstOrDefaultAsync(c => c.Id == companyId))?.Invites!.ToList();
                 return invites!;
 
             }
@@ -65,7 +65,7 @@ namespace AtlasTracker.Services
                     company = await _context.Companies.Include(c => c.Members)
                                                         .Include(c => c.Projects)
                                                         .Include(c => c.Invites)
-                                                        .FirstOrDefaultAsync(c=>c.Id==companyId);
+                                                        .FirstOrDefaultAsync(c => c.Id == companyId);
                 }
                 return company!;
 

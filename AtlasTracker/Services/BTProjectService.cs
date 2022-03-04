@@ -2,6 +2,7 @@
 using AtlasTracker.Models;
 using AtlasTracker.Services.Interfaces;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 
 namespace AtlasTracker.Services
 {
@@ -19,194 +20,63 @@ namespace AtlasTracker.Services
             _userManager = userManager;
         }
 
-
+        //  ----   CRUD --  UPDATE ------------------------------------------- <
         public async Task AddNewProjectAsync(Project project)
         {
-            try
-            {
-
-            }
-
-            catch (Exception)
-            {
-
-                throw;
-            }
-
+            _context.Add(project);
+            await _context.SaveChangesAsync();
         }
 
-        
         public Task<bool> AddProjectManagerAsync(string userId, int projectId)
         {
-            try
-            {
-                
-            }
-
-            catch (Exception)
-            {
-
-                throw;
-            }
-
+            throw new NotImplementedException();
         }
 
         public Task<bool> AddUserToProjectAsync(string userId, int projectId)
         {
-            try
-            {
-                bool user = await _userManager.GetUserIdAsync(userId, projectId);
-            }
-
-            catch (Exception)
-            {
-
-                throw;
-            }
-
+            throw new NotImplementedException();
         }
 
-        public async Task ArchiveProjectAsync(Project project)
+        public Task ArchiveProjectAsync(Project project)
         {
-            try
-            {
-
-            }
-
-            catch (Exception)
-            {
-
-                throw;
-            }
-
+            throw new NotImplementedException();
         }
 
-        public async Task<List<Project>> GetAllProjectsByCompany(int companyId)
+        public Task<List<BTUser>> GetAllProjectMembersExceptPMAsync(int projectId)
         {
-            try
-            {
-                
-            }
-
-            catch (Exception)
-            {
-
-                throw;
-            }
-
+            throw new NotImplementedException();
         }
 
-        public async Task<List<Project>> GetAllProjectsByPriority(int companyId, string priorityName)
+        public Task<List<Project>> GetAllProjectsByCompany(int companyId)
         {
-            try
-            {
-
-            }
-
-            catch (Exception)
-            {
-
-                throw;
-            }
-
+            throw new NotImplementedException();
         }
 
-        public async Task<List<BTUser>> GetAllProjectMembersExceptPMAsync(int projectId)
+        public Task<List<Project>> GetAllProjectsByPriority(int companyId, string priorityName)
         {
-            try
-            {
-                List<BTUser> bTUsers = new List<BTUser>();
-                return bTUsers;
-            }
-
-            catch (Exception)
-            {
-
-                throw;
-            }
-
+            throw new NotImplementedException();
         }
 
-        public async Task<List<Project>> GetArchivedProjectsByCompany(int companyId)
+        public Task<List<Project>> GetArchivedProjectsByCompany(int companyId)
         {
-            try
-            {
-                //List<Project> projects =
-            }
-
-            catch (Exception)
-            {
-
-                throw;
-            }
-
+            throw new NotImplementedException();
         }
 
-        public async Task<List<BTUser>> GetDevelopersOnProjectAsync(int projectId)
+        public Task<List<BTUser>> GetDevelopersOnProjectAsync(int projectId)
         {
-            try
-            {
-
-            }
-
-            catch (Exception)
-            {
-
-                throw;
-            }
-
-        }
-
-        public async Task<BTUser> GetProjectManagerAsync(int projectId)
-        {
-            try
-            {
-
-            }
-
-            catch (Exception)
-            {
-
-                throw;
-            }
-
-        }
-
-        public async Task<List<BTUser>> GetProjectMembersByRoleAsync(int projectId, string role)
-        {
-            try
-            {
-
-            }
-
-            catch (Exception)
-            {
-
-                throw;
-            }
-
+            throw new NotImplementedException();
         }
 
         public async Task<Project> GetProjectByIdAsync(int projectId, int companyId)
         {
             try
             {
+                var project = await _context.Projects
+                                        .Include(p => p.Company)
+                                        .Include(p => p.ProjectPriority)
+                                        .FirstOrDefaultAsync(p => p.Id == projectId && p.CompanyId == companyId);
 
-            }
-
-            catch (Exception)
-            {
-
-                throw;
-            }
-
-        }
-
-        public async Task<List<BTUser>> GetSubmittersOnProjectAsync(int projectId)
-        {
-            try
-            {
-
+                return project!;
             }
             catch (Exception)
             {
@@ -215,109 +85,71 @@ namespace AtlasTracker.Services
             }
         }
 
-        public async Task<List<BTUser>> GetUsersNotOnProjectAsync(int projectId, int companyId)
+        public Task<BTUser> GetProjectManagerAsync(int projectId)
         {
-            try
-            {
-
-            }
-            catch (Exception)
-            {
-
-                throw;
-            }
+            throw new NotImplementedException();
         }
 
-        public async Task<List<Project>> GetUserProjectsAsync(string userId)
+        public Task<List<BTUser>> GetProjectMembersByRoleAsync(int projectId, string role)
         {
-            try
-            {
+            throw new NotImplementedException();
+        }
 
-            }
-            catch (Exception)
-            {
+        public Task<List<BTUser>> GetSubmittersOnProjectAsync(int projectId)
+        {
+            throw new NotImplementedException();
+        }
 
-                throw;
-            }
+        public Task<List<Project>> GetUserProjectsAsync(string userId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<List<BTUser>> GetUsersNotOnProjectAsync(int projectId, int companyId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<bool> IsAssignedProjectManagerAsync(string userId, int projectId)
+        {
+            throw new NotImplementedException();
         }
 
         public Task<bool> IsUserOnProject(string userId, int projectId)
         {
-            try
-            {
-
-            }
-            catch (Exception)
-            {
-
-                throw;
-            }
+            throw new NotImplementedException();
         }
 
-        public async Task<int> LookupProjectPriorityId(string priorityName)
+        public Task<int> LookupProjectPriorityId(string priorityName)
         {
-            try
-            {
-
-            }
-            catch (Exception)
-            {
-
-                throw;
-            }
+            throw new NotImplementedException();
         }
 
-        public async Task RemoveProjectManagerAsync(int projectId)
+        public Task RemoveProjectManagerAsync(int projectId)
         {
-            try
-            {
-
-            }
-            catch (Exception)
-            {
-
-                throw;
-            }
+            throw new NotImplementedException();
         }
 
-        public async Task RemoveUsersFromProjectByRoleAsync(string role, int projectId)
+        public Task RemoveUserFromProjectAsync(string userId, int projectId)
         {
-            try
-            {
-
-            }
-            catch (Exception)
-            {
-
-                throw;
-            }
+            throw new NotImplementedException();
         }
 
-        public async Task RemoveUserFromProjectAsync(string userId, int projectId)
+        public Task RemoveUsersFromProjectByRoleAsync(string role, int projectId)
         {
-            try
-            {
-
-            }
-            catch (Exception)
-            {
-
-                throw;
-            }
+            throw new NotImplementedException();
         }
 
+        public Task RestoreProjectAsync(Project project)
+        {
+            throw new NotImplementedException();
+        }
+
+        //  ----   CRUD --  UPDATE ------------------------------------------- <
         public async Task UpdateProjectAsync(Project project)
         {
-            try
-            {
-
-            }
-            catch (Exception)
-            {
-
-                throw;
-            }
-
+            _context.Update(project);
+            await _context.SaveChangesAsync();
         }
 
     }

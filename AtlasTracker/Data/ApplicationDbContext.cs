@@ -12,7 +12,6 @@ namespace AtlasTracker.Data
 
         }
 
-
         public DbSet<Company> Companies { get; set; } = default!;
         public DbSet<Invite> Invites { get; set; } = default!;
         public DbSet<Project> Projects { get; set; } = default!;
