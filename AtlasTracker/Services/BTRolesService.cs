@@ -121,7 +121,6 @@ namespace AtlasTracker.Services
         }
 
 
-
         public async Task<bool> IsUserInRoleAsync(BTUser user, string roleName)
         {
             try
