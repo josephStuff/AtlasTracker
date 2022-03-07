@@ -11,6 +11,10 @@ using AtlasTracker.Models;
 using AtlasTracker.Services.Interfaces;
 using Microsoft.AspNetCore.Identity;
 using AtlasTracker.Extensions;
+using Microsoft.AspNetCore.Authorization;
+using AtlasTracker.Services;
+using AtlasTracker.Models.Enums;
+using AtlasTracker.Models.ViewModels;
 
 namespace AtlasTracker.Controllers
 {
@@ -19,13 +23,26 @@ namespace AtlasTracker.Controllers
         private readonly ApplicationDbContext _context;
         private readonly IBTProjectService _projectService;
         private readonly UserManager<BTUser> _userManager;
+        private readonly IBTRolesService _rolesService;
+        private readonly IBTLookupService _lookupsService;
 
-        public ProjectsController(ApplicationDbContext context, IBTProjectService projectService, UserManager<BTUser> userManager)
+        public ProjectsController(ApplicationDbContext context, IBTProjectService projectService, UserManager<BTUser> userManager, IBTRolesService rolesService, IBTLookupService lookupsService)
         {
             _context = context;
             _projectService = projectService;
             _userManager = userManager;
+            _rolesService = rolesService;
+            _lookupsService = lookupsService;
         }
+
+        //  My Projects
+
+        //  All Projects
+
+        //  ArchivedProjects
+
+        //  UnassignedProjects
+
 
         // GET: Projects
         public async Task<IActionResult> Index()
@@ -57,11 +74,20 @@ namespace AtlasTracker.Controllers
             return View(project);
         }
 
+
+        [Authorize(Roles = "Admin, ProjectManager")]
         // GET: Projects/Create
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
-            ViewData["CompanyId"] = new SelectList(_context.Companies, "Id", "Name");
-            return View();
+            int companyId = User.Identity.GetCompanyId();
+
+            AddProjectWithPMViewModel model = new();
+
+
+            model.PMList = new SelectList (await _rolesService.GetUsersInRoleAsync(nameof(BTRole.ProjectManager), companyId));
+            model.PriorityList = new SelectList(await _lookupsService.GetProjectPrioritiesAsync(), "Id", "Name");
+
+            return View(model);
         }
 
         // POST: Projects/Create
