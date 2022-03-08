@@ -56,7 +56,7 @@ namespace AtlasTracker.Services
 
         public async Task<Company> GetCompanyInfoByIdAsync(int? companyId)
         {
-            Company company = new();
+            Company? company = new();
 
             try
             {

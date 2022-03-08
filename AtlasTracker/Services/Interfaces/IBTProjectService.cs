@@ -5,6 +5,7 @@ namespace AtlasTracker.Services.Interfaces
     public interface IBTProjectService
     {
 
+        public Task<List<Project>> GetUnassignedProjectsAsync(int companyId);
         public Task AddNewProjectAsync(Project project);
 
         public Task<bool> AddProjectManagerAsync(string userId, int projectId);
@@ -13,7 +14,7 @@ namespace AtlasTracker.Services.Interfaces
 
         public Task ArchiveProjectAsync(Project project);
 
-        public Task<List<Project>> GetAllProjectsByCompany(int companyId);
+        public Task<List<Project>> GetAllProjectsByCompanyAsync(int companyId);
 
         public Task<List<Project>> GetAllProjectsByPriority(int companyId, string priorityName);
 

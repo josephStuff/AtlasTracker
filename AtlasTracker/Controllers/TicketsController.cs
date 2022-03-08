@@ -8,16 +8,69 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using AtlasTracker.Data;
 using AtlasTracker.Models;
+using AtlasTracker.Services;
+using AtlasTracker.Extensions;
+using Microsoft.AspNetCore.Identity;
+using AtlasTracker.Models.Enums;
 
 namespace AtlasTracker.Controllers
 {
     public class TicketsController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly UserManager<BTUser> _userManager;
+        private readonly BTTicketService _ticketService;
+        private readonly BTCompanyInfoService _companyInfoService;
 
-        public TicketsController(ApplicationDbContext context)
+        public TicketsController(ApplicationDbContext context, BTTicketService ticketService, BTCompanyInfoService companyInfoService, UserManager<BTUser> userManager)
         {
             _context = context;
+            _ticketService = ticketService;
+            _companyInfoService = companyInfoService;
+            _userManager = userManager;
+        }
+
+        // get My Tickets -----------------------
+        public async Task<IActionResult> MyTickets()
+        {
+            int companyId = User.Identity.GetCompanyId();
+            string userId = _userManager.GetUserId(User);
+            List<Ticket> tickets = await _ticketService.GetArchivedTicketsAsync(companyId);
+            return View(tickets);
+        }
+        // get all tickets --------------------------------------------
+        public async Task<IActionResult> AllTickets()
+        {
+            List<Ticket> tickets = new();
+            int companyId = User.Identity.GetCompanyId();
+
+            if (User.IsInRole(nameof(BTRole.Admin)) || User.IsInRole(nameof(BTRole.ProjectManager)))
+            {
+                tickets = await _companyInfoService.GetAllTicketsAsync(companyId);
+            }
+            else
+            {
+                tickets = await _companyInfoService.GetAllTicketsAsync(companyId);
+
+            }
+
+            return View(tickets);
+        }
+
+        //  get: archived tickets ============================
+        public async Task<IActionResult> ArchivedTickets()
+        {
+            int companyId = User.Identity.GetCompanyId();
+            List<Ticket> tickets = await _ticketService.GetArchivedTicketsAsync(companyId);
+            return View(tickets);
+        }
+
+        // Get unassigned tickets ---------------------
+        public async Task<IActionResult> UnassignedTickets()
+        {
+            int companyId = User.Identity.GetCompanyId();
+            List<Ticket> tickets = await _ticketService.GetUnassignedTicketsAsync(companyId);
+            return View(tickets);
         }
 
         // GET: Tickets
