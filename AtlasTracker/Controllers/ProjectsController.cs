@@ -76,7 +76,6 @@ namespace AtlasTracker.Controllers
             return View(projects);
         }
 
-
         //  UnassignedProjects
         public async Task<IActionResult> UnassignedProjects()
         {
@@ -93,6 +92,41 @@ namespace AtlasTracker.Controllers
             var applicationDbContext = await _context.Projects.Include(p => p.Company).Include(p => p.ProjectPriority).Where(p => p.CompanyId == companyId).ToListAsync();
             return View(applicationDbContext);
         }
+
+        [HttpGet]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> AssignPM(int? projectId)
+        {
+            if (projectId == null)
+            {
+                return NotFound();
+            }
+            int companyId = User.Identity.GetCompanyId();
+
+            AssignPMViewModel model = new();
+
+            model.Project = await _projectService.GetProjectByIdAsync(projectId.Value, companyId);
+            model.PMList = new SelectList(await _rolesService.GetUsersInRoleAsync(nameof(BTRole.ProjectManager), companyId), "Id", "FullName");
+
+            return View(model);
+        }
+
+
+        [HttpPost]
+        [ValidateAntiForgeryTokenAttribute]
+        public async Task<IActionResult> AssignPM(AssignPMViewModel model)
+        {
+            // Add PM if one was chosen
+            if (!string.IsNullOrEmpty(model.PMID))
+            {
+                await _projectService.AddProjectManagerAsync(model.PMID, model.Project.Id);
+                return RedirectToAction(nameof(AllProjects));
+            }
+
+            return RedirectToAction(nameof(AssignPM), new { projectId = model.Project!.Id });
+        }
+
+
 
         // GET: Projects/Details/5
         public async Task<IActionResult> Details(int? id)
@@ -143,7 +177,7 @@ namespace AtlasTracker.Controllers
 
                     await _projectService.AddNewProjectAsync(model.Project);
 
-                    // add pm if one was chosen ------------------------------------------ < 
+                    // add pm if one was chosen ------------------------------------------ <
                     if (!string.IsNullOrEmpty(model.PMID))
                     {
                         await _projectService.AddProjectManagerAsync(model.PMID, model.Project.Id);
@@ -246,7 +280,7 @@ namespace AtlasTracker.Controllers
 
                     await _projectService.AddNewProjectAsync(model.Project);
 
-                    // add pm if one was chosen ------------------------------------------ < 
+                    // add pm if one was chosen ------------------------------------------ <
                     if (!string.IsNullOrEmpty(model.PMID))
                     {
                         await _projectService.AddProjectManagerAsync(model.PMID, model.Project.Id);
