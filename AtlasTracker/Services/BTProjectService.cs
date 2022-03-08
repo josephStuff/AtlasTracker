@@ -361,18 +361,67 @@ namespace AtlasTracker.Services
             return result;
         }
 
-        public Task<List<Project>> GetUserProjectsAsync(string userId)
+        public async Task<List<Project>> GetUserProjectsAsync(string userId)
         {
+            try
+            {
+                List<Project> userProjects = (await _context.Users.Include(u => u.Projects).ThenInclude(p => p.Company)
+                                                .Include(u => u.Projects).ThenInclude(p => p.Members)
+                                                .Include(u => u.Projects).ThenInclude(p => p.Tickets)
+                                                .Include(u => u.Projects).ThenInclude(t => t.Tickets).ThenInclude(t => t.DeveloperUser)
+                                                .Include(u => u.Projects).ThenInclude(t => t.Tickets).ThenInclude(t => t.OwnerUser)
+                                                .Include(u => u.Projects).ThenInclude(t => t.Tickets).ThenInclude(t => t.TicketPriority)
+                                                .Include(u => u.Projects).ThenInclude(t => t.Tickets).ThenInclude(t => t.TicketStatus)
+                                                .Include(u => u.Projects).ThenInclude(t => t.Tickets).ThenInclude(t => t.TicketType)
+                                                .FirstOrDefaultAsync(u => u.Id == userId)).Projects.ToList();
+
+                return userProjects;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"*** ERROR *** - Error Getting user projects list.  --> {ex.Message}");
+                throw;
+            }
+        }
+
+        public async Task<List<BTUser>> GetUsersNotOnProjectAsync(int projectId, int companyId)
+        {
+            try
+            {
+                List<BTUser> users = await _context.Users.Where(u => u.Projects.All(p => p.Id != projectId)).ToListAsync();
+
+                return users.Where(u => u.CompanyId == companyId).ToList();
+
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
             throw new NotImplementedException();
         }
 
-        public Task<List<BTUser>> GetUsersNotOnProjectAsync(int projectId, int companyId)
+        public async Task<bool> IsAssignedProjectManagerAsync(string userId, int projectId)
         {
-            throw new NotImplementedException();
-        }
+            try
+            {
+                string projectManagerId = (await GetProjectManagerAsync(projectId))?.Id;
 
-        public Task<bool> IsAssignedProjectManagerAsync(string userId, int projectId)
-        {
+                if (projectManagerId == userId)
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
             throw new NotImplementedException();
         }
 
@@ -399,13 +448,39 @@ namespace AtlasTracker.Services
             }
         }
 
-        public Task<int> LookupProjectPriorityId(string priorityName)
+        public async Task<int> LookupProjectPriorityId(string priorityName)
         {
-            throw new NotImplementedException();
+            try
+            {
+                int priorityId = (await _context.ProjectPriorities.FirstOrDefaultAsync(p => p.Name == priorityName)).Id;
+                return priorityId;
+
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
         }
 
-        public Task RemoveProjectManagerAsync(int projectId)
+        public async Task RemoveProjectManagerAsync(int projectId)
         {
+            try
+            {
+                Project project = await _context.Projects.Include(p => p.Members).FirstOrDefaultAsync(p => p.Id == projectId);
+
+                foreach (BTUser member in project?.Members)
+                {
+                    if (await _rolesService.IsUserInRoleAsync(member, BTRole.ProjectManager.ToString()))
+                    {
+                        await RemoveUserFromProjectAsync(member.Id, projectId);
+                    }
+                }
+            }
+            catch
+            {
+                throw;
+            }
             throw new NotImplementedException();
         }
 
@@ -439,9 +514,32 @@ namespace AtlasTracker.Services
 
         }
 
-        public Task RemoveUsersFromProjectByRoleAsync(string role, int projectId)
+        public async Task RemoveUsersFromProjectByRoleAsync(string role, int projectId)
         {
-            throw new NotImplementedException();
+            try
+            {
+                List<BTUser> members = await GetProjectMembersByRoleAsync(projectId, role);
+                Project project = await _context.Projects.FirstOrDefaultAsync(p => p.Id == projectId);
+
+                foreach (BTUser btUser in members)
+                {
+                    try
+                    {
+                        project.Members.Remove(btUser);
+                        await _context.SaveChangesAsync();
+                    }
+                    catch (Exception)
+                    {
+                        throw;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"*** ERROR *** - Error Removing users from project.  --> {ex.Message}");
+                throw;
+            }
+
         }
 
         public async Task RestoreProjectAsync(Project project)
