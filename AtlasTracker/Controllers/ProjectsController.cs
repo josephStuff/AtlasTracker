@@ -89,7 +89,7 @@ namespace AtlasTracker.Controllers
         public async Task<IActionResult> Index()
         {
             int companyId = User.Identity.GetCompanyId();
-            var applicationDbContext = await _context.Projects.Include(p => p.Company).Include(p => p.ProjectPriority).Where(p => p.CompanyId == companyId).ToListAsync();
+            var applicationDbContext = await _context.Projects.Include(p => p.Company).Include(p => p.ProjectPriority).Where(p => p.CompanyId == companyId && p.Archived == false).ToListAsync();
             return View(applicationDbContext);
         }
 
@@ -168,9 +168,9 @@ namespace AtlasTracker.Controllers
                                                                 .Select(m => m.Id).ToList();
 
                 // Remove current members ----------------- <
-                foreach (string memeber in memberIds)
+                foreach (string member in memberIds)
                 {
-                    await _projectService.RemoveUserFromProjectAsync(memeber, model.Project.Id);
+                    await _projectService.RemoveUserFromProjectAsync(member, model.Project.Id);
                 }
 
                 // add selected members
@@ -179,14 +179,13 @@ namespace AtlasTracker.Controllers
                     await _projectService.AddUserToProjectAsync(member, model.Project.Id);
                 }
 
-                // fo to project details ------------------------ <
+                // go to project details ------------------------ <
                 return RedirectToAction("Details", "Projects", new { id = model.Project.Id });
 
             }
 
             return RedirectToAction(nameof(AssignMembers), new { id = model.Project.Id });
         }
-
 
 
         // GET: Projects/Details/5
@@ -197,12 +196,18 @@ namespace AtlasTracker.Controllers
                 return NotFound();
             }
 
-            //string userId = _userManager.GetUserId(User);
-            //BTUser btUser = _context.Users.Find(userId);
+            // Remember that the _context should not be used directly in the controller so....
 
-            int companyId = User.Identity.GetCompanyId();
+            // Edit the following code to use the service layer.
+            // Your goal is to return the 'project' from the databse
+            // with the Id equal to the parameter passed in.
+            // This is the only modification necessary for this method/action.
 
-            Project project = await _projectService.GetProjectByIdAsync(id.Value, companyId);
+            var project = await _context.Projects
+                .Include(p => p.Company)
+                .Include(p => p.ProjectPriority)
+                .FirstOrDefaultAsync(m => m.Id == id);
+
 
             if (project == null)
             {
@@ -210,50 +215,16 @@ namespace AtlasTracker.Controllers
             }
 
             return View(project);
+                        
         }
-
 
         [Authorize(Roles = "Admin, ProjectManager")]
         // GET: Projects/Create
-        public async Task<IActionResult> Create(AddProjectWithPMViewModel model)
+        public async Task<IActionResult> Create()
         {
             int companyId = User.Identity.GetCompanyId();
 
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    if (model.Project?.ImageFormFile != null)
-                    {
-                        model.Project.ImageFileData = await _fileService.ConvertFileToByteArrayAsync(model.Project.ImageFormFile);
-                        model.Project.ImageFileName = model.Project.ImageFormFile.FileName;
-                        model.Project.ImageContentType = model.Project.ImageFormFile.ContentType;
-                    }
-
-                    model.Project.CompanyId = companyId;
-                    model.Project.CreatedDate = DateTime.UtcNow;
-
-                    model.Project.StartDate = DateTime.SpecifyKind(model.Project.StartDate.DateTime, DateTimeKind.Utc);
-                    model.Project.EndDate = DateTime.SpecifyKind(model.Project.EndDate.DateTime, DateTimeKind.Utc);
-
-                    await _projectService.AddNewProjectAsync(model.Project);
-
-                    // add pm if one was chosen ------------------------------------------ <
-                    if (!string.IsNullOrEmpty(model.PMID))
-                    {
-                        await _projectService.AddProjectManagerAsync(model.PMID, model.Project.Id);
-                    }
-
-                    return RedirectToAction(nameof(Index));
-                }
-
-                catch (Exception)
-                {
-
-                    throw;
-                }
-            }
-
+            AddProjectWithPMViewModel model = new();
 
             model.PMList = new SelectList(await _rolesService.GetUsersInRoleAsync(nameof(BTRole.ProjectManager), companyId), "Id", "FullName");
             model.PriorityList = new SelectList(await _lookupsService.GetProjectPrioritiesAsync(), "Id", "Name");

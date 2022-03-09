@@ -10,6 +10,7 @@
                     <label asp-for="@Model.UsersList" class="control-label">Assign team members for Project</label>
                 </div>
                 <div class="card-body">
+
                     <form method="post" asp-action="AssignMembers" asp-controller="Projects">
                         <input hidden asp-for="Project!.Id" />
                         <div class="col-12 mb-3">
@@ -23,6 +24,7 @@
                             </div>
                         </div>
                     </form>
+
                 </div>
             </div>
         </div>
