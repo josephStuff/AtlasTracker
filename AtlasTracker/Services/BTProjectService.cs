@@ -10,7 +10,7 @@ namespace AtlasTracker.Services
     public class BTProjectService : IBTProjectService
     {
         private readonly ApplicationDbContext _context;
-        private readonly IBTRolesService _rolesService;
+        private readonly IBTRolesService _rolesService;        
 
         public BTProjectService(ApplicationDbContext context, IBTRolesService rolesService)
         {
@@ -222,11 +222,6 @@ namespace AtlasTracker.Services
 
                 throw;
             }
-        }
-
-        public Task<List<Project>> GetArchivedProjectsByCompany(int companyId)
-        {
-            throw new NotImplementedException();
         }
         #endregion
 

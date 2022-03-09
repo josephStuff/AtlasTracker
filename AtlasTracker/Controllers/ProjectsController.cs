@@ -71,7 +71,7 @@ namespace AtlasTracker.Controllers
         public async Task<IActionResult> ArchivedProjects()
         {
             int companyId = User.Identity.GetCompanyId();
-            List<Project> projects = await _projectService.GetArchivedProjectsByCompany(companyId);
+            List<Project> projects = await _projectService.GetArchivedProjectsByCompanyAsync(companyId);
 
             return View(projects);
         }
@@ -101,6 +101,7 @@ namespace AtlasTracker.Controllers
             {
                 return NotFound();
             }
+
             int companyId = User.Identity.GetCompanyId();
 
             AssignPMViewModel model = new();
@@ -124,6 +125,66 @@ namespace AtlasTracker.Controllers
             }
 
             return RedirectToAction(nameof(AssignPM), new { projectId = model.Project!.Id });
+        }
+
+
+
+
+        [HttpGet]
+        [Authorize(Roles = "Admin, ProjectManager")]
+        public async Task<IActionResult> AssignMembers(int? projectId)
+        {
+            if (projectId == null)
+            {
+                return NotFound();
+            }
+
+            ProjectMembersViewModel model = new();
+
+            int companyId = User.Identity.GetCompanyId();
+            model.Project = await _projectService.GetProjectByIdAsync(projectId.Value, companyId);
+
+            List<BTUser> developers = await _rolesService.GetUsersInRoleAsync(nameof(BTRole.Developer), companyId);
+            List<BTUser> submitters = await _rolesService.GetUsersInRoleAsync(nameof(BTRole.Submitter), companyId);
+
+            List<BTUser> teamMembers = developers.Concat(submitters).ToList();
+
+            List<string> projectMembers = model.Project.Members.Select(p => p.Id).ToList();
+
+            model.UsersList = new MultiSelectList(teamMembers, "Id", "FullName", projectMembers);
+
+            return View(model);
+
+        }
+
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> AssignMembers(ProjectMembersViewModel model)
+        {
+            if (model.SelectedUsers != null)
+            {
+                List<string> memberIds = (await _projectService.GetAllProjectMembersExceptPMAsync(model.Project.Id))
+                                                                .Select(m => m.Id).ToList();
+
+                // Remove current members ----------------- <
+                foreach (string memeber in memberIds)
+                {
+                    await _projectService.RemoveUserFromProjectAsync(memeber, model.Project.Id);
+                }
+
+                // add selected members
+                foreach (string member in model.SelectedUsers)
+                {
+                    await _projectService.AddUserToProjectAsync(member, model.Project.Id);
+                }
+
+                // fo to project details ------------------------ <
+                return RedirectToAction("Details", "Projects", new { id = model.Project.Id });
+
+            }
+
+            return RedirectToAction(nameof(AssignMembers), new { id = model.Project.Id });
         }
 
 
@@ -310,17 +371,17 @@ namespace AtlasTracker.Controllers
             return View(model);
         }
 
-        // GET: Projects/Delete/5
-        public async Task<IActionResult> Delete(int? id)
+        // GET: Projects/Archive/
+        public async Task<IActionResult> Archive(int? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var project = await _context.Projects
-                .Include(p => p.Company)
-                .FirstOrDefaultAsync(m => m.Id == id);
+            int companyId = User.Identity.GetCompanyId();
+            var project = await _projectService.GetProjectByIdAsync(id.Value, companyId);
+                
             if (project == null)
             {
                 return NotFound();
@@ -329,14 +390,50 @@ namespace AtlasTracker.Controllers
             return View(project);
         }
 
-        // POST: Projects/Delete/5
-        [HttpPost, ActionName("Delete")]
+        // POST: Projects/Archive/
+        [HttpPost, ActionName("Archive")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public async Task<IActionResult> ArchiveConfirmed(int id)
         {
-            var project = await _context.Projects.FindAsync(id);
-            _context.Projects.Remove(project);
-            await _context.SaveChangesAsync();
+            int companyId = User.Identity.GetCompanyId();
+            var project = await _projectService.GetProjectByIdAsync(id, companyId);
+            
+            await _projectService.ArchiveProjectAsync(project);
+
+
+            return RedirectToAction(nameof(Index));
+        }
+
+        // GET: Projects/Restore/
+        public async Task<IActionResult> Restore(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            int companyId = User.Identity.GetCompanyId();
+            var project = await _projectService.GetProjectByIdAsync(id.Value, companyId);
+
+            if (project == null)
+            {
+                return NotFound();
+            }
+
+            return View(project);
+        }
+
+        // POST: Projects/Restore/5
+        [HttpPost, ActionName("Restore")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> RestoreConfirmed(int id)
+        {
+            int companyId = User.Identity.GetCompanyId();
+            var project = await _projectService.GetProjectByIdAsync(id, companyId);
+
+            await _projectService.ArchiveProjectAsync(project);
+
+
             return RedirectToAction(nameof(Index));
         }
 

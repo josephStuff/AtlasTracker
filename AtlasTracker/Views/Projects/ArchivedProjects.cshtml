@@ -1,17 +1,19 @@
 ﻿@model IEnumerable<AtlasTracker.Models.Project>
+@using AtlasTracker.Models.Enums
 @using AtlasTracker.Services.Interfaces
+@using Microsoft.AspNetCore.Identity
 
 @inject IBTProjectService ProjectService
+@inject UserManager<BTUser> UserManager
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Archived Projects";
+    BTUser btUser = await UserManager.GetUserAsync(User);
 }
 
-<h1>Index</h1>
+<h1>Archived Projects</h1>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
+
 <table class="table">
     <thead>
         <tr>
@@ -68,25 +70,33 @@
                 <td>
                     @Html.DisplayFor(modelItem => item.EndDate)
                 </td>
-                
+
                 <td>
                     @Html.DisplayFor(modelItem => item.Archived)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Company!.Name)
+                    @Html.DisplayFor(modelItem => item.Company.Name)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.ProjectPriority!.Name)
+                    @Html.DisplayFor(modelItem => item.ProjectPriority.Name)
                 </td>
                 <td>
-                    @((await ProjectService.GetProjectManagerAsync(item.Id))?.FullName))
+                    @((await ProjectService.GetProjectManagerAsync(item.Id))?.FullName)
                 </td>
                 <td>
-                    <a class="btn btn-sm btn-outline-warning" asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
                     <a class="btn btn-sm btn-outline-dark" asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                    <a class="btn btn-sm btn-outline-danger" asp-action="Archive" asp-route-id="@item.Id">Archive</a>
-                </td>
-            </tr>
+
+                    @{
+                        bool isProjectPM = (await ProjectService.GetProjectManagerAsync(item.Id))?.Id == btUser.Id;
+                    }
+
+                    @if (User.IsInRole(nameof(BTRole.Admin)) || isProjectPM)
+                    {
+                        <a class="btn btn-sm btn-outline-success" asp-action="Restore" asp-route-id="@item.Id">Restore</a>
+                    }
+
+            </td>
+        </tr>
         }
     </tbody>
 </table>

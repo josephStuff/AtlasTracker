@@ -1,13 +1,17 @@
 ﻿@model IEnumerable<AtlasTracker.Models.Project>
+@using AtlasTracker.Models.Enums
 @using AtlasTracker.Services.Interfaces
+@using Microsoft.AspNetCore.Identity
 
 @inject IBTProjectService ProjectService
+@inject UserManager<BTUser> UserManager
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Archived";
+    BTUser btUser = await UserManager.GetUserAsync(User);
 }
 
-<h1>Index</h1>
+<h1>Archived</h1>
 
 <p>
     <a asp-action="Create">Create New</a>
@@ -68,24 +72,27 @@
                 <td>
                     @Html.DisplayFor(modelItem => item.EndDate)
                 </td>
-                
+
                 <td>
                     @Html.DisplayFor(modelItem => item.Archived)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Company!.Name)
+                    @Html.DisplayFor(modelItem => item.Company.Name)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.ProjectPriority!.Name)
+                    @Html.DisplayFor(modelItem => item.ProjectPriority.Name)
                 </td>
                 <td>
-                    @((await ProjectService.GetProjectManagerAsync(item.Id))?.FullName))
+                    @((await ProjectService.GetProjectManagerAsync(item.Id))?.FullName)
                 </td>
-                <td>
-                    <a class="btn btn-sm btn-outline-warning" asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                    <a class="btn btn-sm btn-outline-dark" asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                    <a class="btn btn-sm btn-outline-danger" asp-action="Archive" asp-route-id="@item.Id">Archive</a>
-                </td>
+                <td></td>
+
+                    <form asp-action="Delete">
+                        <input type="hidden" asp-for="item.Id" />
+                        <input type="submit" value="Delete" class="btn btn-danger" /> |
+                        <a asp-action="Index">Back to List</a>
+                    </form>
+
             </tr>
         }
     </tbody>

@@ -12,9 +12,9 @@
 <div class="row">
     <div class="col-md-4">
         <form method="post" asp-action="AssignPM" asp-controller="Projects">
-            <input hidden asp-for="Project.Id" />
+            <input hidden asp-for="Project!.Id" />
 
-            <h2>@Model.Project.Name </h2>
+            <h2>@Model!.Project!.Name </h2>
 
             <p>@Model.Project.Description </p>
 
