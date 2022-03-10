@@ -79,7 +79,7 @@
                     @Html.DisplayFor(modelItem => item.ProjectPriority!.Name)
                 </td>
                 <td>
-                    @((await ProjectService.GetProjectManagerAsync(item.Id))?.FullName))
+                    @((await ProjectService.GetProjectManagerAsync(item.Id))?.FullName)
                 </td>
                 <td>
                     <a class="btn btn-sm btn-outline-warning" asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
