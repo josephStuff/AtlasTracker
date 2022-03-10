@@ -18,6 +18,7 @@ namespace AtlasTracker.Services.Interfaces
         public Task<List<Ticket>> GetAllTicketsByTypeAsync(int companyId, string typeName);
         public Task<List<Ticket>> GetTicketsByRoleAsync(string role, string userId, int companyId);
         public Task<List<Ticket>> GetTicketsByUserIdAsync(string userId, int companyId);
+        public Task<List<Ticket>> GetUnassignedTicketsAsync(int companyId);
         public Task<List<Ticket>> GetProjectTicketsByRoleAsync(string role, string userId, int projectId, int companyId);
         public Task<List<Ticket>> GetProjectTicketsByStatusAsync(string statusName, int companyId, int projectId);
         public Task<List<Ticket>> GetProjectTicketsByPriorityAsync(string priorityName, int companyId, int projectId);

@@ -12,6 +12,7 @@ using AtlasTracker.Services;
 using AtlasTracker.Extensions;
 using Microsoft.AspNetCore.Identity;
 using AtlasTracker.Models.Enums;
+using AtlasTracker.Services.Interfaces;
 
 namespace AtlasTracker.Controllers
 {
@@ -19,10 +20,10 @@ namespace AtlasTracker.Controllers
     {
         private readonly ApplicationDbContext _context;
         private readonly UserManager<BTUser> _userManager;
-        private readonly BTTicketService _ticketService;
-        private readonly BTCompanyInfoService _companyInfoService;
+        private readonly IBTTicketService _ticketService;
+        private readonly IBTCompanyInfoService _companyInfoService;
 
-        public TicketsController(ApplicationDbContext context, BTTicketService ticketService, BTCompanyInfoService companyInfoService, UserManager<BTUser> userManager)
+        public TicketsController(ApplicationDbContext context, IBTTicketService ticketService, IBTCompanyInfoService companyInfoService, UserManager<BTUser> userManager)
         {
             _context = context;
             _ticketService = ticketService;
@@ -77,11 +78,10 @@ namespace AtlasTracker.Controllers
         public async Task<IActionResult> Index()
         {
             int companyId = User.Identity.GetCompanyId();
-            var applicationDbContext = await _context.Tickets.Include(t => t.DeveloperUser).Include(t => t.OwnerUser)
-                                                       .Include(t => t.Project).Include(t => t.TicketPriority)
-                                                       .Include(t => t.TicketStatus).Include(t => t.TicketType).ToListAsync();
-            return View(applicationDbContext);
-            //return View(await applicationDbContext.ToListAsync());
+            List<Ticket> tickets = await _ticketService.GetAllTicketsByCompanyAsync(companyId);
+                
+            return View(tickets);
+            
         }
 
         // GET: Tickets/Details/5
