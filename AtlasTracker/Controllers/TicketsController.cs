@@ -76,8 +76,12 @@ namespace AtlasTracker.Controllers
         // GET: Tickets
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.Tickets.Include(t => t.DeveloperUser).Include(t => t.OwnerUser).Include(t => t.Project).Include(t => t.TicketPriority).Include(t => t.TicketStatus).Include(t => t.TicketType);
-            return View(await applicationDbContext.ToListAsync());
+            int companyId = User.Identity.GetCompanyId();
+            var applicationDbContext = await _context.Tickets.Include(t => t.DeveloperUser).Include(t => t.OwnerUser)
+                                                       .Include(t => t.Project).Include(t => t.TicketPriority)
+                                                       .Include(t => t.TicketStatus).Include(t => t.TicketType).ToListAsync();
+            return View(applicationDbContext);
+            //return View(await applicationDbContext.ToListAsync());
         }
 
         // GET: Tickets/Details/5

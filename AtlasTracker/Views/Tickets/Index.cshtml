@@ -1,4 +1,9 @@
-﻿@model IEnumerable<AtlasTracker.Models.Ticket>
+﻿@model AtlasTracker.Models.Ticket
+@using AtlasTracker.Models.Enums
+@using AtlasTracker.Services.Interfaces
+
+@inject IBTTicketService TicketService
+@inject IBTProjectService ProjectService
 
 @{
     ViewData["Title"] = "Index";
@@ -73,22 +78,22 @@
                 @Html.DisplayFor(modelItem => item.ArchivedByProject)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Project.Description)
+                @Html.DisplayFor(modelItem => item.Project!.Description)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.TicketPriority.Name)
+                @Html.DisplayFor(modelItem => item.TicketPriority!.Name)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.TicketType.Name)
+                @Html.DisplayFor(modelItem => item.TicketType!.Name)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.TicketStatus.Name)
+                @Html.DisplayFor(modelItem => item.TicketStatus!.Name)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.OwnerUser.Id)
+                @Html.DisplayFor(modelItem => item.OwnerUser!.Id)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.DeveloperUser.Id)
+                @Html.DisplayFor(modelItem => item.DeveloperUser!.Id)
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |

@@ -85,13 +85,13 @@ namespace AtlasTracker.Controllers
             return View(projects);
         }
 
-        // GET: Projects
-        public async Task<IActionResult> Index()
-        {
-            int companyId = User.Identity.GetCompanyId();
-            var applicationDbContext = await _context.Projects.Include(p => p.Company).Include(p => p.ProjectPriority).Where(p => p.CompanyId == companyId && p.Archived == false).ToListAsync();
-            return View(applicationDbContext);
-        }
+        //// GET: Projects
+        //public async Task<IActionResult> Index()
+        //{
+        //    int companyId = User.Identity.GetCompanyId();
+        //    var applicationDbContext = await _context.Projects.Include(p => p.Company).Include(p => p.ProjectPriority).Where(p => p.CompanyId == companyId && p.Archived == false).ToListAsync();
+        //    return View(applicationDbContext);
+        //}
 
         [HttpGet]
         [Authorize(Roles = "Admin")]

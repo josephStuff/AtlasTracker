@@ -52,9 +52,9 @@
 
             <div class="form-group">
                 <label class="control-label">Project Image</label>
-                <input asp-for="Project.ImageFileName" class="form-control" type="file" accept=".png, .jpg, .jpeg, .gif"
+                <input asp-for="Project!.ImageFileName" class="form-control" type="file" accept=".png, .jpg, .jpeg, .gif"
                        onchange="document.getElementById('imagefileData').src = window.URL.createObjectURL(this.files[0])" />
-                <span asp-validation-for="Project.ImageFileName" class="text-danger"></span>
+                <span asp-validation-for="Project!.ImageFileName" class="text-danger"></span>
             </div>
 
             <label> Image Preview </label>
