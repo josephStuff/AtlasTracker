@@ -7,7 +7,6 @@ using Microsoft.EntityFrameworkCore;
 
 namespace AtlasTracker.Services
 {
-
     public class BTTicketService : IBTTicketService
     {
         private readonly ApplicationDbContext _context;
@@ -352,14 +351,14 @@ namespace AtlasTracker.Services
         {
             try
             {
-                return await _context.Tickets
-                                     .Include(t => t.DeveloperUser)
-                                     .Include(t => t.Project)
-                                     .Include(t => t.TicketPriority)
-                                     .Include(t => t.TicketStatus)
-                                     .Include(t => t.TicketType)
-                                     .AsNoTracking()
-                                     .FirstOrDefaultAsync(t => t.Id == ticketId);
+                return await _context.Tickets.Include(t => t.DeveloperUser)
+                                                .Include(t => t.Project)
+                                                .Include(t => t.TicketPriority)
+                                                .Include(t => t.TicketStatus)
+                                                .Include(t => t.TicketType)
+                                                .AsNoTracking()
+                                                .FirstOrDefaultAsync(t => t.Id == ticketId);
+
             }
             catch (Exception)
             {

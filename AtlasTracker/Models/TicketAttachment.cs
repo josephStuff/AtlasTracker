@@ -24,8 +24,7 @@ namespace AtlasTracker.Models
         public string? UserId { get; set; }
 
 
-        [NotMapped]
-        [DisplayName("Select a file")]
+        [NotMapped]        
         [DataType(DataType.Upload)]
         [MaxFileSize(1024 * 1024)]
         [AllowedExtensions(new string[] { ".jpg", ".png", ".doc", ".docx", ".xls", ".xlsx", ".pdf" })]
@@ -46,6 +45,6 @@ namespace AtlasTracker.Models
         public virtual BTUser? User { get; set; }
 
 
-
     }
 }
+
