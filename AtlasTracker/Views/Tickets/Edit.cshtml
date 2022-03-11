@@ -28,7 +28,7 @@
 
             <div class="form-group">
                 <label asp-for="Created" class="control-label"></label>
-                <input type="" class="form-control" value="@Html.DisplayFor(model => model.Created)" />
+                <input asp-for="Created" class="form-control" /> @*value="@Html.DisplayFor(model => model.Created)" />*@
                 @*<span asp-validation-for="Created" class="text-danger"></span>*@
             </div>
 
