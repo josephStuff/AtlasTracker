@@ -28,7 +28,8 @@ namespace AtlasTracker.Controllers
         private readonly IBTCompanyInfoService _companyInfoService;
         private readonly IBTFileService _fileService;
 
-        public ProjectsController(ApplicationDbContext context, IBTProjectService projectService, UserManager<BTUser> userManager, IBTRolesService rolesService, IBTLookupService lookupsService, IBTFileService fileService, IBTCompanyInfoService companyInfoService)
+        public ProjectsController(ApplicationDbContext context, IBTProjectService projectService, UserManager<BTUser> userManager, IBTRolesService rolesService, IBTLookupService lookupsService, 
+                                                                IBTFileService fileService, IBTCompanyInfoService companyInfoService)
         {
             _context = context;
             _projectService = projectService;
@@ -202,7 +203,7 @@ namespace AtlasTracker.Controllers
             // Your goal is to return the 'project' from the databse
             // with the Id equal to the parameter passed in.
             // This is the only modification necessary for this method/action.
-
+            
             var project = await _context.Projects
                 .Include(p => p.Company)
                 .Include(p => p.ProjectPriority)
@@ -241,7 +242,8 @@ namespace AtlasTracker.Controllers
         {
             if (ModelState.IsValid)
             {
-                project.CreatedDate= DateTime.UtcNow;
+                //AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
+                project.CreatedDate = DateTimeOffset.UtcNow;
                 await _projectService.AddNewProjectAsync(project);
                 return RedirectToAction(nameof(Index));
             }
@@ -307,8 +309,8 @@ namespace AtlasTracker.Controllers
                     }
 
                     // format dates  (created , start & end)
-                    model.Project.CreatedDate = DateTime.SpecifyKind(model.Project.CreatedDate.Date, DateTimeKind.Utc);
-                    model.Project.StartDate = DateTime.SpecifyKind(model.Project.StartDate.DateTime, DateTimeKind.Utc);
+                    model.Project.CreatedDate = DateTime.SpecifyKind(model.Project.EndDate.DateTime, DateTimeKind.Utc);
+                    model.Project.StartDate = DateTime.SpecifyKind(model.Project.EndDate.DateTime, DateTimeKind.Utc);
                     model.Project.EndDate = DateTime.SpecifyKind(model.Project.EndDate.DateTime, DateTimeKind.Utc);
 
                     await _projectService.AddNewProjectAsync(model.Project);

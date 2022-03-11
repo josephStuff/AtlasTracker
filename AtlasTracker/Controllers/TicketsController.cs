@@ -256,6 +256,41 @@ namespace AtlasTracker.Controllers
             return View(ticket);
         }
 
+
+        // GET: Tickets/Archive/
+        public async Task<IActionResult> Archive(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            int companyId = User.Identity.GetCompanyId();
+            var ticket = await _ticketService.GetTicketByIdAsync(companyId);
+
+            if (ticket == null)
+            {
+                return NotFound();
+            }
+
+            return View(ticket);
+        }
+
+        // POST: Tickets/Archive/
+        [HttpPost, ActionName("Archive")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ArchiveConfirmed(int id)
+        {
+            int companyId = User.Identity.GetCompanyId();
+            var ticket = await _ticketService.GetTicketByIdAsync(id);
+
+            await _ticketService.ArchiveTicketAsync(ticket);
+
+
+            return RedirectToAction(nameof(Index));
+        }
+
+
         // GET: Tickets/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
