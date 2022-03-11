@@ -491,16 +491,24 @@ namespace AtlasTracker.Services
                 else if (await _btRolesService.IsUserInRoleAsync(btUser!, BTRole.Developer.ToString()))
                 {
                     tickets = (await _btProjectService.GetAllProjectsByCompanyAsync(companyId))
-                                                    .SelectMany(p => p.Tickets).Where(t => t.DeveloperUserId == userId).ToList();
+                                                    .SelectMany(p => p.Tickets)
+                                                    .Where(t => t.DeveloperUserId == userId || t.OwnerUserId == userId).ToList();
                 }
-                else if (await _btRolesService.IsUserInRoleAsync(btUser!, BTRole.Submitter.ToString()))
+                else if (await _btRolesService.IsUserInRoleAsync(btUser!, nameof(BTRole.Submitter)))
                 {
                     tickets = (await _btProjectService.GetAllProjectsByCompanyAsync(companyId))
-                                                    .SelectMany(t => t.Tickets).Where(t => t.OwnerUserId == userId).ToList();
+                                                    .SelectMany(t => t.Tickets)
+                                                    .Where(t => t.OwnerUserId == userId).ToList();
                 }
                 else if (await _btRolesService.IsUserInRoleAsync(btUser!, BTRole.ProjectManager.ToString()))
                 {
-                    tickets = (await _btProjectService.GetUserProjectsAsync(userId)).SelectMany(t => t.Tickets).ToList();
+                    List<Ticket>? projectTickets = (await _btProjectService.GetUserProjectsAsync(userId))
+                                                                                        .SelectMany(t => t.Tickets).ToList();
+
+                    List<Ticket>? submittedTickets = (await _btProjectService.GetAllProjectsByCompanyAsync(companyId))
+                                                                                        .SelectMany(p => p.Tickets)
+                                                                                        .Where(t => t.OwnerUserId == userId).ToList();
+                    tickets = projectTickets.Concat(submittedTickets).ToList();
                 }
 
                 return tickets;

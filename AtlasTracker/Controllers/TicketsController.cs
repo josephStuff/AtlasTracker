@@ -14,6 +14,7 @@ using Microsoft.AspNetCore.Identity;
 using AtlasTracker.Models.Enums;
 using AtlasTracker.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
+using AtlasTracker.Models.ViewModels;
 
 namespace AtlasTracker.Controllers
 {
@@ -24,11 +25,11 @@ namespace AtlasTracker.Controllers
         private readonly IBTTicketService _ticketService;
         private readonly IBTCompanyInfoService _companyInfoService;
         private readonly IBTProjectService _projectService;
-        private readonly IBTLookupService _lookupService;        
+        private readonly IBTLookupService _lookupService;
 
 
-        public TicketsController(ApplicationDbContext context, IBTTicketService ticketService, IBTCompanyInfoService companyInfoService, 
-                                                                UserManager<BTUser> userManager, IBTProjectService projectService, 
+        public TicketsController(ApplicationDbContext context, IBTTicketService ticketService, IBTCompanyInfoService companyInfoService,
+                                                                UserManager<BTUser> userManager, IBTProjectService projectService,
                                                                 IBTLookupService lookupService)
         {
             _context = context;
@@ -36,22 +37,24 @@ namespace AtlasTracker.Controllers
             _companyInfoService = companyInfoService;
             _userManager = userManager;
             _projectService = projectService;
-            _lookupService = lookupService;
+            _lookupService = lookupService;          
         }
 
         // get My Tickets -----------------------
         public async Task<IActionResult> MyTickets()
         {
-            int companyId = User.Identity.GetCompanyId();
             string userId = _userManager.GetUserId(User);
+            int companyId = User.Identity.GetCompanyId();
+
             List<Ticket> tickets = await _ticketService.GetArchivedTicketsAsync(companyId);
+
             return View(tickets);
         }
         // get all tickets --------------------------------------------
         public async Task<IActionResult> AllTickets()
         {
-            List<Ticket> tickets = new();
             int companyId = User.Identity.GetCompanyId();
+            List<Ticket> tickets = new();
 
             if (User.IsInRole(nameof(BTRole.Admin)) || User.IsInRole(nameof(BTRole.ProjectManager)))
             {
@@ -70,6 +73,7 @@ namespace AtlasTracker.Controllers
         {
             int companyId = User.Identity.GetCompanyId();
             List<Ticket> tickets = await _ticketService.GetArchivedTicketsAsync(companyId);
+
             return View(tickets);
         }
 
@@ -98,10 +102,56 @@ namespace AtlasTracker.Controllers
                         pmTickets.Add(ticket);
                     }
                 }
+
+                return View(pmTickets);
+
             }
 
-            return View(tickets);
         }
+
+
+        [Authorize(Roles = "Admin, ProjectManager")]
+        [HttpGet]
+        public async Task<IActionResult> AssignDeveloper(int id)
+        {
+            AssignDeveloperViewModel model = new();
+
+            model.Ticket = await _ticketService.GetTicketByIdAsync(id);
+            model.Developers = new SelectList(await _projectService.GetProjectMembersByRoleAsync(model.Ticket.ProjectId, nameof(BTRole.Developer)),
+                                                "Id", "FullName");
+            
+            return View(model); 
+        }
+
+        [Authorize(Roles = "Admin, ProjectManager")]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> AssignDeveloper(AssignDeveloperViewModel model)
+        {
+            if (model.DeveloperId != null)
+            {
+                BTUser btUser = await _userManager.GetUserAsync(User);
+                //oldTicket
+                //Ticket oldTicket = await _ticketService.GetTicketAsNoTrackingAsync(model.Ticket!.Id);
+
+                try
+                {
+                    await _ticketService.AssignTicketAsync(model.Ticket.Id, model.DeveloperId);
+                }
+                catch (Exception)
+                {
+
+                    throw;
+                }
+
+                return RedirectToAction(nameof(Details), new { id = model.Ticket?.Id });
+            }
+
+            return RedirectToAction(nameof(AssignDeveloper), new { id = model.Ticket?.Id });
+
+        }
+
+
 
         // GET: Tickets
         public async Task<IActionResult> Index()
@@ -121,14 +171,14 @@ namespace AtlasTracker.Controllers
                 return NotFound();
             }
 
-            var ticket = await _context.Tickets
-                .Include(t => t.DeveloperUser)
-                .Include(t => t.OwnerUser)
-                .Include(t => t.Project)
-                .Include(t => t.TicketPriority)
-                .Include(t => t.TicketStatus)
-                .Include(t => t.TicketType)
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var ticket = await _context.Tickets.Include(t => t.DeveloperUser)
+                                               .Include(t => t.OwnerUser)
+                                               .Include(t => t.Project)
+                                               .Include(t => t.TicketPriority)
+                                               .Include(t => t.TicketStatus)
+                                               .Include(t => t.TicketType)
+                                               .FirstOrDefaultAsync(m => m.Id == id);
+
             if (ticket == null)
             {
                 return NotFound();
@@ -140,23 +190,24 @@ namespace AtlasTracker.Controllers
         // GET: Tickets/Create
         public async Task<IActionResult> Create()
         {
-            BTUser bTUser = await _userManager.GetUserAsync(User);
+            BTUser btUser = await _userManager.GetUserAsync(User);
 
             if (User.IsInRole(nameof(BTRole.Admin)))
             {
-                ViewData["ProjectId"] = new SelectList(await _projectService.GetAllProjectsByCompanyAsync(bTUser.CompanyId), "Id", "Name");
+                ViewData["ProjectId"] = new SelectList(await _projectService.GetAllProjectsByCompanyAsync(btUser.CompanyId), "Id", "Name");
             }
             else
             {
-                ViewData["ProjectId"] = new SelectList(await _projectService.GetUserProjectsAsync(bTUser.Id), "Id", "Name");
+                ViewData["ProjectId"] = new SelectList(await _projectService.GetUserProjectsAsync(btUser.Id), "Id", "Name");
             }
 
             //ViewData["DeveloperUserId"] = new SelectList(_context.Users, "Id", "Id");
             //ViewData["OwnerUserId"] = new SelectList(_context.Users, "Id", "Id");
-            ViewData["ProjectId"] = new SelectList(_context.Projects, "Id", "Description");
-            ViewData["TicketPriorityId"] = new SelectList(_context.TicketPriorities, "Id", "Name");
+            //ViewData["ProjectId"] = new SelectList(_context.Projects, "Id", "Description");
+            //ViewData["TicketStatusId"] = new SelectList(await _lookupService.GetTicketPrioritiesAsync(), "Id", "Name");
+
+            ViewData["TicketPriorityId"] = new SelectList(await _lookupService.GetTicketTypesAsync(), "Id", "Name");
             ViewData["TicketTypeId"] = new SelectList(await _lookupService.GetTicketTypesAsync(), "Id", "Name");
-            ViewData["TicketStatusId"] = new SelectList(await _lookupService.GetTicketPrioritiesAsync(), "Id", "Name");
 
             return View();
         }
@@ -167,25 +218,44 @@ namespace AtlasTracker.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,Title,Description,Created,Updated,Archived,ArchivedByProject,ProjectId,TicketTypeId,TicketPriorityId,TicketStatusId,OwnerUserId,DeveloperUserId")] Ticket ticket)
-        {            
+        {       
+            BTUser btUser = await _userManager.GetUserAsync (User);
             ModelState.Remove("OwnerUserId");
 
             if (ModelState.IsValid)
             {
-                ticket.Created = DateTimeOffset.UtcNow;
-                ticket.TicketStatusId = (await _ticketService.LookupTicketStatusIdAsync(nameof(BTTicketStatus.New))).Value;
-                ticket.OwnerUserId = _userManager.GetUserId(User);
-                await _ticketService.AddNewTicketAsync(ticket);
-                return RedirectToAction(nameof(Index));
+                try
+                {
+                    //ticket.Created = DateTime.UtcNow;
+                    ticket.Created = DateTimeOffset.UtcNow;
+                    ticket.OwnerUserId = btUser.Id;
+                    //ticket.OwnerUserId = _userManager.GetUserId(User);
+                    ticket.TicketStatusId = (await _ticketService.LookupTicketStatusIdAsync(nameof(BTTicketStatus.New))).Value;
+
+                    await _ticketService.AddNewTicketAsync(ticket);
+
+                }
+                catch (Exception)
+                {
+
+                    throw;
+                }
+
+                return RedirectToAction(nameof(AllTickets));
+                // we could instead redirect to the project details here -------------------------- < 
             }
 
-            int companyId = User.Identity.GetCompanyId();
-            ViewData["ProjectId"] = new SelectList(_context.Projects, "Id", "Description");
-            ViewData["TicketPriorityId"] = new SelectList(_context.TicketPriorities, "Id", "Name");
-            ViewData["TicketTypeId"] = new SelectList(_context.TicketTypes, "Id", "Name");
-            //ViewData["TicketStatusId"] = new SelectList(_context.TicketStatuses, "Id", "Name", ticket.TicketStatusId);
-            //ViewData["DeveloperUserId"] = new SelectList(_context.Users, "Id", "Name", ticket.DeveloperUserId);
-            //ViewData["OwnerUserId"] = new SelectList(_context.Users, "Id", "Name", ticket.OwnerUserId);
+            if (User.IsInRole(nameof(BTRole.Admin)))
+            {
+                ViewData["ProjectId"] = new SelectList(await _projectService.GetAllProjectsByCompanyAsync(btUser.CompanyId), "Id", "Name");
+            }
+            else
+            {
+                ViewData["ProjectId"] = new SelectList(await _projectService.GetUserProjectsAsync(btUser.Id), "Id", "Name");
+            }
+
+            ViewData["TicketPriorityId"] = new SelectList(await _lookupService.GetTicketTypesAsync(), "Id", "Name");
+            ViewData["TicketTypeId"] = new SelectList(await _lookupService.GetTicketTypesAsync(), "Id", "Name");
 
             return View(ticket);
         }
@@ -205,13 +275,10 @@ namespace AtlasTracker.Controllers
                 return NotFound();
             }
 
-            ViewData["TicketPriorityId"] = new SelectList(_context.TicketPriorities, "Id", "Name", ticket.TicketPriorityId);
-            ViewData["TicketStatusId"] = new SelectList(_context.TicketStatuses, "Id", "Name", ticket.TicketStatusId);
-            ViewData["TicketTypeId"] = new SelectList(_context.TicketTypes, "Id", "Name", ticket.TicketTypeId);
-            ViewData["DeveloperUserId"] = new SelectList(_context.Users, "Id", "Id", ticket.DeveloperUserId);
-            ViewData["OwnerUserId"] = new SelectList(_context.Users, "Id", "Id", ticket.OwnerUserId);
-            ViewData["ProjectId"] = new SelectList(_context.Projects, "Id", "Description", ticket.ProjectId);
-
+            ViewData["TicketPriorityId"] = new SelectList(await _lookupService.GetProjectPrioritiesAsync(), "Id", "Name", ticket.TicketPriorityId);
+            ViewData["TicketStatusId"] = new SelectList(await _lookupService.GetTicketStatusesAsync(), "Id", "Name", ticket.TicketStatusId);
+            ViewData["TicketTypeId"] = new SelectList(await _lookupService.GetTicketTypesAsync(), "Id", "Name", ticket.TicketTypeId);
+            
             return View(ticket);
         }
 
@@ -245,14 +312,15 @@ namespace AtlasTracker.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index));
+
+                return RedirectToAction(nameof(AllTickets));
             }
-            ViewData["DeveloperUserId"] = new SelectList(_context.Users, "Id", "Id", ticket.DeveloperUserId);
-            ViewData["OwnerUserId"] = new SelectList(_context.Users, "Id", "Id", ticket.OwnerUserId);
-            ViewData["ProjectId"] = new SelectList(_context.Projects, "Id", "Description", ticket.ProjectId);
-            ViewData["TicketPriorityId"] = new SelectList(_context.TicketPriorities, "Id", "Name", ticket.TicketPriorityId);
-            ViewData["TicketStatusId"] = new SelectList(_context.TicketStatuses, "Id", "Name", ticket.TicketStatusId);
-            ViewData["TicketTypeId"] = new SelectList(_context.TicketTypes, "Id", "Name", ticket.TicketTypeId);
+
+
+            ViewData["TicketPriorityId"] = new SelectList(await _lookupService.GetProjectPrioritiesAsync(), "Id", "Name", ticket.TicketPriorityId);
+            ViewData["TicketStatusId"] = new SelectList(await _lookupService.GetTicketStatusesAsync(), "Id", "Name", ticket.TicketStatusId);
+            ViewData["TicketTypeId"] = new SelectList(await _lookupService.GetTicketTypesAsync(), "Id", "Name", ticket.TicketTypeId);
+
             return View(ticket);
         }
 
@@ -277,6 +345,7 @@ namespace AtlasTracker.Controllers
         }
 
         // POST: Tickets/Archive/
+        [Authorize(Roles = "Admin, ProjectManager")]
         [HttpPost, ActionName("Archive")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> ArchiveConfirmed(int id)

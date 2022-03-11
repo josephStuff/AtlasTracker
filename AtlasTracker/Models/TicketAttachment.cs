@@ -1,6 +1,8 @@
-﻿using System.ComponentModel;
+﻿using AtlasTracker.Extensions;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using static AtlasTracker.Extensions.MaxFileSizeAttribute;
 
 namespace AtlasTracker.Models
 {
@@ -23,7 +25,10 @@ namespace AtlasTracker.Models
 
 
         [NotMapped]
+        [DisplayName("Select a file")]
         [DataType(DataType.Upload)]
+        [MaxFileSize(1024 * 1024)]
+        [AllowedExtensions(new string[] { ".jpg", ".png", ".doc", ".docx", ".xls", ".xlsx", ".pdf" })]
         public IFormFile? ImageFormFile { get; set; }
 
 
