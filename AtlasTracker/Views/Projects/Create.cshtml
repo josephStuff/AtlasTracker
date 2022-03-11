@@ -68,24 +68,7 @@
                     </select>
                 </div>
             }
-
-            <div class="form-group">
-                <label asp-for="Project!.ImageFileData!" class="control-label"></label>
-                <input asp-for="Project!.ImageFileData!" class="form-control" />
-                <span asp-validation-for="Project!.ImageFileData!" class="text-danger"></span>
-            </div>
-
-            <div class="form-group">
-                <label asp-for="Project!.ImageContentType!" class="control-label"></label>
-                <input asp-for="Project!.ImageContentType!" class="form-control" />
-                <span asp-validation-for="Project!.ImageContentType!" class="text-danger"></span>
-            </div>
-
-            <div class="form-group form-check">
-                <label class="form-check-label">
-                    <input class="form-check-input" asp-for="Project!.Archived!" /> @Html.DisplayNameFor(model => model.Project!.Archived!)
-                </label>
-            </div>
+            
 
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />

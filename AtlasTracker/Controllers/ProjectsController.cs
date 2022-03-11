@@ -241,6 +241,7 @@ namespace AtlasTracker.Controllers
         {
             if (ModelState.IsValid)
             {
+                project.CreatedDate= DateTime.UtcNow;
                 await _projectService.AddNewProjectAsync(project);
                 return RedirectToAction(nameof(Index));
             }
@@ -306,7 +307,7 @@ namespace AtlasTracker.Controllers
                     }
 
                     // format dates  (created , start & end)
-                    model.Project.CreatedDate = DateTime.SpecifyKind(model.Project.CreatedDate.DateTime, DateTimeKind.Utc);
+                    model.Project.CreatedDate = DateTime.SpecifyKind(model.Project.CreatedDate.Date, DateTimeKind.Utc);
                     model.Project.StartDate = DateTime.SpecifyKind(model.Project.StartDate.DateTime, DateTimeKind.Utc);
                     model.Project.EndDate = DateTime.SpecifyKind(model.Project.EndDate.DateTime, DateTimeKind.Utc);
 

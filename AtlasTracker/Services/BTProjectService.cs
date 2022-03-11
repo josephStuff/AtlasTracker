@@ -198,7 +198,10 @@ namespace AtlasTracker.Services
             }
 
         }
+        #endregion
 
+
+        #region
         public Task<List<Project>> GetAllProjectsByPriority(int companyId, string priorityName)
         {
             throw new NotImplementedException();
