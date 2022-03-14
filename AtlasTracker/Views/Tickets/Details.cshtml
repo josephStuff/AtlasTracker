@@ -4,15 +4,15 @@
 @using AtlasTracker.Services.Interfaces
 @using Microsoft.AspNetCore.Identity;
 
-@inject IBTFileService fileService
+@inject IBTFileService FileService
 @inject IBTTicketService TicketService
 @inject UserManager<BTUser> UserManager
 
 
 @{
     ViewData["Title"] = "Details";
-    BTUser btUser = await btUser.GetUserAsync(User);
-    BTUser ProjectService = await TicketService.GetProjectManagerAsync(Model!.Id);
+    BTUser btUser = btUser.GetUserAsync(User);
+    var ticketService = await TicketService.GetAllTicketsByCompanyAsync(Model!.Id);
 }
 
 <h1>Ticket Details</h1>
@@ -177,14 +177,14 @@
                                         <div class="col col-sm-2">
                                             <a asp-action="ShowFile" asp-controller="Tickets" asp-route-Id="@item.Id">
                                                 <div class="icon">
-                                                    <img src="@fileService.GetFileIcon(item.ImageFileName!)" style="height:50px;width:50px" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="@item.FileName" />
+                                                    <img src="@FileService.GetFileIcon(item.ImageFileName!)" style="height:50px;width:50px" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="@item.ImageFileName" />
                                                 </div>
                                             </a>
                                             <div style="font-size:x-small">
                                                 <div class="file-name">
                                                     <strong>@item.Description</strong>
                                                 </div>
-                                                <small>Size: @fileService.FormatFileSize(item.ImageFileData!.Length) </small>
+                                                <small>Size: @FileService.FormatFileSize(item.ImageFileData!.Length) </small>
                                             </div>
                                         </div>
                                     }

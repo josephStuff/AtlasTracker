@@ -12,7 +12,7 @@ using AtlasTracker.Extensions;
 using AtlasTracker.Services.Interfaces;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Identity;
-
+using Microsoft.AspNetCore.Identity.UI.Services;
 
 namespace AtlasTracker.Controllers
 {
@@ -21,13 +21,13 @@ namespace AtlasTracker.Controllers
         private readonly ApplicationDbContext _context;
         private readonly IBTProjectService _projectService;
         private readonly IDataProtector _protector;
-        private readonly IBTEmailService _emailService;
+        private readonly IEmailSender _emailService;
         private readonly IBTCompanyInfoService _companyInfoService;
         private readonly IBTInviteService _inviteService;
         private readonly UserManager<BTUser> _userManager;
 
-        public InvitesController(ApplicationDbContext context, IBTProjectService projectService, IDataProtectionProvider dataProtectionProvider, 
-                                                                IBTEmailService emailService, IBTCompanyInfoService companyInfoService, 
+        public InvitesController(ApplicationDbContext context, IBTProjectService projectService, IDataProtectionProvider dataProtectionProvider,
+                                                                IEmailSender emailService, IBTCompanyInfoService companyInfoService,
                                                                 IBTInviteService inviteService, UserManager<BTUser> userManager)
         {
             _context = context;
@@ -97,7 +97,8 @@ namespace AtlasTracker.Controllers
                 string company = _protector.Protect(companyId.ToString());
 
                 string callbackUrl = Url.Action("ProcessInvite", "Invites", new { token, email, company }, protocol: Request.Scheme);
-
+                string body = $@"{invite.Message} <br />Please join my Company. <br />Click the following link to join our team. <br />
+                                <a href = ""{callbackUrl}"">COLLABORATE</a>";
                 string destination = invite.InviteeEmail;
                 // Customize company name here --------------------------------- <
                 Company btCompany = await _companyInfoService.GetCompanyInfoByIdAsync(companyId);

@@ -4,6 +4,7 @@ using AtlasTracker.Services;
 using AtlasTracker.Services.Factories;
 using AtlasTracker.Services.Interfaces;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -32,7 +33,7 @@ builder.Services.AddScoped<IBTTicketService, BTTicketService>();
 builder.Services.AddScoped<IBTRolesService, BTRolesService>();
 builder.Services.AddScoped<IBTLookupService, BTLookupService>();
 builder.Services.AddScoped<IBTFileService, BTFileService>();
-builder.Services.AddScoped<IBTEmailService, BTEmailService>();
+builder.Services.AddScoped<IEmailSender, BTEmailService>();
 
 builder.Services.Configure<MailSettings>(builder.Configuration.GetSection("MailSettings"));
 

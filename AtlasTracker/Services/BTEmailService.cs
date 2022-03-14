@@ -1,11 +1,11 @@
 ﻿
 using AtlasTracker.Models;
 using AtlasTracker.Services.Interfaces;
+using MailKit.Net.Smtp;
 using MailKit.Security;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.Extensions.Options;
 using MimeKit;
-using System.Net.Mail;
 
 
 namespace AtlasTracker.Services
