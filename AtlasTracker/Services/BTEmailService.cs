@@ -1,58 +1,66 @@
 ﻿
+using AtlasTracker.Models;
+using AtlasTracker.Services.Interfaces;
+using MailKit.Security;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.Extensions.Options;
+using MimeKit;
+using System.Net.Mail;
+
 
 namespace AtlasTracker.Services
 {
-    
-    //public class BTEmailService : IEmailSender
-    //{
-    //    #region Properties
-    //    private readonly MailSettings _mailSettings;
 
-    //    #endregion
+    public class BTEmailService : IEmailSender
+    {
+        #region Properties
+        private readonly MailSettings _mailSettings;
+        private readonly IBTEmailService _emailService;
 
-    //    #region Constructor
-    //    public BTEmailService(IOptions<MailSettings> mailSettings)
-    //    {
-    //        _mailSettings = mailSettings.Value;
-    //    }
+        #endregion
 
-    //    #endregion
+        #region Constructor
+        public BTEmailService(IOptions<MailSettings> mailSettings, IBTEmailService emailService)
+        {
+            _mailSettings = mailSettings.Value;
+            _emailService = emailService;
+        }
 
-    //    #region Send Email
-    //    public async Task SendEmailAsync(string emailTo, string subject, string htmlMessage)
-    //    {
-    //        MimeMessage email = new();
+        #endregion
 
-    //        email.Sender = MailboxAddress.Parse(_mailSettings.Mail);
-    //        email.To.Add(MailboxAddress.Parse(emailTo));
-    //        email.Subject = subject;
+        #region Send Email
+        public async Task SendEmailAsync(string emailTo, string subject, string htmlMessage)
+        {
+            MimeMessage email = new();
 
-    //        var builder = new BodyBuilder
-    //        {
-    //            HtmlBody = htmlMessage
-    //        };
+            email.Sender = MailboxAddress.Parse(_mailSettings.Mail);
+            email.To.Add(MailboxAddress.Parse(emailTo));
+            email.Subject = subject;
 
-    //        email.Body = builder.ToMessageBody();
+            var builder = new BodyBuilder
+            {
+                HtmlBody = htmlMessage
+            };
 
-    //        try
-    //        {
-    //            using var smtp = new SmtpClient();
-    //            smtp.Connect(_mailSettings.Host, _mailSettings.Port, SecureSocketOptions.StartTls);
-    //            smtp.Authenticate(_mailSettings.Mail, _mailSettings.Password);
+            email.Body = builder.ToMessageBody();
 
-    //            await smtp.SendAsync(email);
+            try
+            {
+                using var smtp = new SmtpClient();
+                smtp.Connect(_mailSettings.Host, _mailSettings.Port, SecureSocketOptions.StartTls);
+                smtp.Authenticate(_mailSettings.Mail, _mailSettings.Password);
 
-    //            smtp.Disconnect(true);
-    //        }
-    //        catch (Exception)
-    //        {
+                await smtp.SendAsync(email);
 
-    //            throw;
-    //        }
-    //    }
+                smtp.Disconnect(true);
+            }
+            catch (Exception)
+            {
 
-    //    #endregion   
-    //}
+                throw;
+            }
+        }
+
+        #endregion   
+    }
 }

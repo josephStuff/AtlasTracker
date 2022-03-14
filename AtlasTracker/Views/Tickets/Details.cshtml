@@ -1,20 +1,24 @@
 ﻿@model AtlasTracker.Models.Ticket
 @using AtlasTracker.Models.Enums
+@using AtlasTracker.Services
 @using AtlasTracker.Services.Interfaces
+@using Microsoft.AspNetCore.Identity;
 
 @inject IBTFileService fileService
+@inject IBTTicketService TicketService
+@inject UserManager<BTUser> UserManager
 
 
 @{
     ViewData["Title"] = "Details";
-    //    BTUser btUser = await btUser.GetUserAsync(User);
-    //    BTUser ProjectService= await ProjectService.GetProjectManagerAsync(Model!.Id);
+    BTUser btUser = await btUser.GetUserAsync(User);
+    BTUser ProjectService = await TicketService.GetProjectManagerAsync(Model!.Id);
 }
 
 <h1>Ticket Details</h1>
 
 <div>
-    <div classxfont-weighteighteightgetainer-fluid">
+    <div class="xfont-weight eighteightgetainer-fluid">
         <div class="row gy-2">
             <div class="col-md-12 col">
                 <div class="row col-cols-2 mt-5 bg-secondary">
@@ -173,14 +177,14 @@
                                         <div class="col col-sm-2">
                                             <a asp-action="ShowFile" asp-controller="Tickets" asp-route-Id="@item.Id">
                                                 <div class="icon">
-                                                    <img src="@FileService.GetFileIcon(item.FileName)" style="height:50px;width:50px" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="@item.FileName" />
+                                                    <img src="@fileService.GetFileIcon(item.ImageFileName!)" style="height:50px;width:50px" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="@item.FileName" />
                                                 </div>
                                             </a>
                                             <div style="font-size:x-small">
                                                 <div class="file-name">
                                                     <strong>@item.Description</strong>
                                                 </div>
-                                                <small>Size: @FileService.FormatFileSize(item.FileData.Length) </small>
+                                                <small>Size: @fileService.FormatFileSize(item.ImageFileData!.Length) </small>
                                             </div>
                                         </div>
                                     }

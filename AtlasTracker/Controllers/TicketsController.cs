@@ -17,7 +17,7 @@ using Microsoft.AspNetCore.Authorization;
 using AtlasTracker.Models.ViewModels;
 
 namespace AtlasTracker.Controllers
-{
+{    
     public class TicketsController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -32,7 +32,8 @@ namespace AtlasTracker.Controllers
 
         public TicketsController(ApplicationDbContext context, IBTTicketService ticketService, IBTCompanyInfoService companyInfoService,
                                                                 UserManager<BTUser> userManager, IBTProjectService projectService,
-                                                                IBTLookupService lookupService, IBTFileService fileService, IBTTicketHistoryService ticketHistoryService)
+                                                                IBTLookupService lookupService, IBTFileService fileService, 
+                                                                IBTTicketHistoryService ticketHistoryService)
         {
             _context = context;
             _ticketService = ticketService;
