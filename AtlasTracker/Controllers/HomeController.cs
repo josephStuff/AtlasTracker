@@ -30,6 +30,11 @@ namespace AtlasTracker.Controllers
             return View();
         }
 
+        public IActionResult Default()
+        {
+            return View();
+        }
+
         public IActionResult Privacy()
         {
             return View();
@@ -42,8 +47,10 @@ namespace AtlasTracker.Controllers
         }
 
         
-        public async Task<IActionResult> Dashboard()
+        public async Task<IActionResult> Dashboard(string swalMessage = null!)
         {
+            ViewData["SwalMessage"] = swalMessage;
+
             DashboardViewModel model = new();
             int companyId = User.Identity!.GetCompanyId();
             model.Company = await _companyInfoService.GetCompanyInfoByIdAsync(companyId);
@@ -53,6 +60,17 @@ namespace AtlasTracker.Controllers
 
             return View(model);
         }
+
+        //[HttpPost]
+        //public async Task<JsonResult> GglProjectPriority()
+        //{
+        //    int companyId = User.Identity?.GetCompanyId();
+
+        //    List<object> chartData = new();
+        //    chartData.Add(new object[] { "Priority", "Count" });
+
+        //    return View();
+        //}
 
 
     }

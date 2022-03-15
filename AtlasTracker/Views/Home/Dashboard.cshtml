@@ -3,8 +3,10 @@
 @using Microsoft.AspNetCore.Identity
 @using AtlasTracker.Services.Interfaces
 
+@inject IBTProjectService ProjectService
 @inject UserManager<BTUser> UserManager
 @inject IBTTicketService TicketService
+@inject IBTRolesService RolesService
 
 @{
     ViewData["Title"] = "Dashboard";
@@ -26,10 +28,10 @@
 </a>
 
 @* Get The btUser FullName *@
-<strong>@btUser.FullName</strong>
+<strong>@btUser!.FullName</strong>
 <span class="text-muted" style="font-size:x-small;">
     @* Company Name *@
-    <strong>@Model.Company.Name</strong>
+    <strong>@Model!.Company!.Name</strong>
 </span>
 
 
@@ -53,13 +55,13 @@
                     <div class="card col m-1 p-2">
                         <div class="card-body">
                             <h5>Chart 3</h5>
-                            <p>add projects</p>
+                            <p>add tickets</p>
                         </div>
                     </div>
                     <div class="card col m-1 p-2">
                         <div class="card-body">
                             <h5>Chart 4</h5>
-                            <p>add projects</p>
+                            <p>add tickets</p>
                         </div>
                     </div>
                 </div>
@@ -94,9 +96,12 @@
                                         <th>Name</th>
                                         <th>Description</th>
                                         <th>End Date</th>
+                                        <th>End Date</th>
+                                        <th>Priority</th>
+                                        <th>Action</th>
                                     </tr>
                                 </thead>
-                                @foreach (Project project in Model.Projects.OrderBy(p => p.EndDate))
+                                @foreach (Project project in Model.Projects!.OrderBy(p => p.EndDate))
                                 {
                                     @if (!project.Archived)
                                     {
@@ -128,22 +133,23 @@
                                 <thead>
                                     <tr>
                                         <th>Title</th>
+
                                         <th>Status</th>
                                         <th>Priority</th>
                                         <th>Date</th>
                                     </tr>
                                 </thead>
-                                @foreach (Ticket ticket in Model.Tickets.OrderBy(p => p.Created))
+                                @foreach (Ticket ticket in Model.Tickets!.OrderBy(p => p.Created))
                                 {
-                                    @if (!(ticket.Archived || ticket.ArchivedByProject) 
+                                    @if (!(ticket.Archived || ticket.ArchivedByProject)
                                         && ticket.DeveloperUserId == btUser.Id
                                         || (User.IsInRole(nameof(BTRole.Admin)) || User.IsInRole(nameof(BTRole.ProjectManager)))
                                         )
                                     {
                                         <tr>
                                             <td><a asp-controller="Tickets" asp-action="Details" asp-route-id="@ticket.Id">@ticket.Title</a></td>
-                                            <td>@ticket.TicketStatus.Name</td>
-                                            <td>@ticket.TicketPriority.Name</td>
+                                            <td>@ticket.TicketStatus!.Name</td>
+                                            <td>@ticket.TicketPriority!.Name</td>
                                             <td>@ticket.Created</td>
                                         </tr>
                                     }
@@ -167,7 +173,7 @@
                             @* Looop over Company members. Display Name and Role *@
                             <ul class="right_chat list-unstyled mb-0">
 
-                                @foreach (BTUser member in await ProjectService.GetAllProjectMembersExceptPMAsync(Model.Id))
+                                @*@foreach (BTUser member in await ProjectService.GetAllProjectMembersExceptPMAsync(projectId))
                                 {
                                     <li class="">
                                         <a href="">
@@ -187,7 +193,7 @@
                                             <span class="" style="font-size:x-small">[@((await UserManager.GetRolesAsync(member)).FirstOrDefault())]</span>
                                         </div>
                                     </li>
-                                }
+                                }*@
                             </ul>
 
                         </div>
