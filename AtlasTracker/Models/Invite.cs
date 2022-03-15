@@ -68,7 +68,5 @@ namespace AtlasTracker.Models
         public virtual Project? Project { get; set; }
 
 
-
-
     }
 }
