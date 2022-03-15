@@ -115,7 +115,6 @@ namespace AtlasTracker.Controllers
 
                 await _inviteService.AddNewInviteAsync(invite);
 
-
                 return RedirectToAction(nameof(Index));
             }
 

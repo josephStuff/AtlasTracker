@@ -14,16 +14,14 @@ namespace AtlasTracker.Services
     public class BTEmailService : IEmailSender
     {
         #region Properties
-        private readonly MailSettings _mailSettings;
-        private readonly IBTEmailService _emailService;
+        private readonly MailSettings _mailSettings;        
 
         #endregion
 
         #region Constructor
-        public BTEmailService(IOptions<MailSettings> mailSettings, IBTEmailService emailService)
+        public BTEmailService(IOptions<MailSettings> mailSettings)
         {
-            _mailSettings = mailSettings.Value;
-            _emailService = emailService;
+            _mailSettings = mailSettings.Value;        
         }
 
         #endregion

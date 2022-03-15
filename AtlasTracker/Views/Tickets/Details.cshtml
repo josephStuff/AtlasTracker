@@ -7,12 +7,13 @@
 @inject IBTFileService FileService
 @inject IBTTicketService TicketService
 @inject UserManager<BTUser> UserManager
+@inject IBTProjectService ProjectService
 
 
 @{
     ViewData["Title"] = "Details";
-    BTUser btUser = btUser.GetUserAsync(User);
-    var ticketService = await TicketService.GetAllTicketsByCompanyAsync(Model!.Id);
+    BTUser btUser = await UserManager.GetUserAsync(User);
+    BTUser projectManager = await ProjectService.GetProjectManagerAsync(Model!.ProjectId);
 }
 
 <h1>Ticket Details</h1>
@@ -30,9 +31,10 @@
                             <p>[Description]</p>
                             <div class="progress-container progress-info m-b-25">
                                 @*Project Name and information*@
+
                                 @{
-                                    var start = Model!.Created; @* DateTime *@
-                                    //var end = Model.EndDate.DateTime;
+                                    var start = Model!.Project!.CreatedDate.DateTime;
+                                    var end = Model.Project!.EndDate.DateTime;
                                     var today = DateTime.Now;
                                     var percent = today >= end ? 100 : today < start ? 0 : Math.Round((today.Subtract(start)) / (end.Subtract(start)) * 100);
                                 }
