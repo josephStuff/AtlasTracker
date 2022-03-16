@@ -35,7 +35,7 @@ namespace AtlasTracker.Controllers
             return View();
         }
 
-        public IActionResult Default()
+        public async Task<IActionResult> Default()
         {
             return View();
         }

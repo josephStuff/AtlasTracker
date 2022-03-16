@@ -293,7 +293,6 @@
                                         <i class="bx bx-home-alt" aria-hidden="true"></i>
                                         <span>Dashboard</span>
                                     </a>
-                                    </a>
                                 </li>
                                 <li class="nav-parent">
                                     <a class="nav-link" href="#">
@@ -363,7 +362,6 @@
                                         <span class="float-end badge badge-primary">182</span>
                                         <i class="bx bx-envelope" aria-hidden="true"></i>
                                         <span>Mailbox</span>
-                                    </a>
                                     </a>
                                 </li>
                                 <li class="nav-parent nav-expanded nav-active">
@@ -831,7 +829,6 @@
                                         <i class="bx bx-loader-circle" aria-hidden="true"></i>
                                         <span>Ajax</span>
                                     </a>
-                                    </a>
                                 </li>
                                 <li class="nav-parent">
                                     <a class="nav-link" href="#">
@@ -961,13 +958,11 @@
                                         <i class="bx bx-window-alt" aria-hidden="true"></i>
                                         <span>Front-End <em class="not-included">(Not Included)</em></span>
                                     </a>
-                                    </a>
                                 </li>
                                 <li>
                                     <a class="nav-link" href="https://www.okler.net/forums/topic/porto-admin-changelog/">
                                         <i class="bx bx-book-alt" aria-hidden="true"></i>
                                         <span>Changelog</span>
-                                    </a>
                                     </a>
                                 </li>
 
@@ -1031,17 +1026,6 @@
                         </div>
                     </div>
 
-                    <script>
-                        // Maintain Scroll Position
-                        if (typeof localStorage !== 'undefined') {
-                            if (localStorage.getItem('sidebar-left-position') !== null) {
-                                var initialPosition = localStorage.getItem('sidebar-left-position'),
-                                    sidebarLeft = document.querySelector('#sidebar-left .nano-content');
-
-                                sidebarLeft.scrollTop = initialPosition;
-                            }
-                        }
-                    </script>
 
                 </div>
 
@@ -1169,6 +1153,19 @@
 
     <!-- Theme Initialization Files -->
     <script src="/template/js/theme.init.js"></script>
+
+    <!-- Specific Page Vendor -->
+    <script src="~/template/vendor/select2/js/select2.js"></script>
+    <script src="~/template/vendor/datatables/media/js/jquery.dataTables.min.js"></script>
+    <script src="~/template/vendor/datatables/media/js/dataTables.bootstrap5.min.js"></script>
+    <script src="~/template/vendor/datatables/extras/TableTools/Buttons-1.4.2/js/dataTables.buttons.min.js"></script>
+    <script src="~/template/vendor/datatables/extras/TableTools/Buttons-1.4.2/js/buttons.bootstrap4.min.js"></script>
+    <script src="~/template/vendor/datatables/extras/TableTools/Buttons-1.4.2/js/buttons.html5.min.js"></script>
+    <script src="~/template/vendor/datatables/extras/TableTools/Buttons-1.4.2/js/buttons.print.min.js"></script>
+    <script src="~/template/vendor/datatables/extras/TableTools/JSZip-2.5.0/jszip.min.js"></script>
+    <script src="~/template/vendor/datatables/extras/TableTools/pdfmake-0.1.32/pdfmake.min.js"></script>
+    <script src="~/template/vendor/datatables/extras/TableTools/pdfmake-0.1.32/vfs_fonts.js"></script>
+
 
     <!-- Examples -->
     <script src="/template/js/examples/examples.dashboard.js"></script>
