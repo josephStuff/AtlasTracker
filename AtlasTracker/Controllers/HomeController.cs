@@ -25,21 +25,7 @@ namespace AtlasTracker.Controllers
             _projectService = projectService;
         }
 
-        public async Task<IActionResult> Index()
-        {
-            //if (User.Identity!.IsAuthenticated)
-            //{
-            //    return RedirectToAction("Dashboard", "Home");
-            //}
-
-            return View();
-        }
-
-        public async Task<IActionResult> Default()
-        {
-            return View();
-        }
-
+        
         public async Task<IActionResult> Landing()
         {
             return View();
