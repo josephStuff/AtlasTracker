@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 namespace AtlasTracker.Services
 {
 
-    public class BTNotificationService
+    public class BTNotificationService : IBTNotificationService
     {
         private readonly ApplicationDbContext _context;
         private readonly IEmailSender _emailSender;

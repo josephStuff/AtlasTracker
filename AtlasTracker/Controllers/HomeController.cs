@@ -27,10 +27,10 @@ namespace AtlasTracker.Controllers
 
         public async Task<IActionResult> Index()
         {
-            if (User.Identity!.IsAuthenticated)
-            {
-                return RedirectToAction("Dashboard", "Home");
-            }
+            //if (User.Identity!.IsAuthenticated)
+            //{
+            //    return RedirectToAction("Dashboard", "Home");
+            //}
 
             return View();
         }
