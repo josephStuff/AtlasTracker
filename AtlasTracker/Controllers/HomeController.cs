@@ -56,7 +56,7 @@ namespace AtlasTracker.Controllers
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
 
-        
+        [Authorize]
         public async Task<IActionResult> Dashboard()  // string swalMessage = null!
         {
             //ViewData["SwalMessage"] = swalMessage;
