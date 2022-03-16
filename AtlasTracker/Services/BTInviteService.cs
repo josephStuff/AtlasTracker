@@ -10,7 +10,7 @@ namespace AtlasTracker.Services
             throw new NotImplementedException();
         }
 
-        public Task AddNewInviteAsync(Invite invite)
+        public async Task AddNewInviteAsync(Invite invite)
         {
             throw new NotImplementedException();
         }
@@ -30,7 +30,7 @@ namespace AtlasTracker.Services
             throw new NotImplementedException();
         }
 
-        public Task<bool> ValidateInviteCodeAsync(Guid? token)
+        public async Task<bool> ValidateInviteCodeAsync(Guid? token)
         {
             throw new NotImplementedException();
         }

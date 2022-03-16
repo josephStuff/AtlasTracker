@@ -113,7 +113,6 @@ namespace AtlasTracker.Controllers
             return View(model);
         }
 
-
         [HttpPost]
         [ValidateAntiForgeryTokenAttribute]
         public async Task<IActionResult> AssignPM(AssignPMViewModel model)
@@ -127,8 +126,6 @@ namespace AtlasTracker.Controllers
 
             return RedirectToAction(nameof(AssignPM), new { projectId = model.Project!.Id });
         }
-
-
 
 
         [HttpGet]

@@ -279,10 +279,6 @@ namespace AtlasTracker.Controllers
                 ViewData["ProjectId"] = new SelectList(await _projectService.GetUserProjectsAsync(btUser.Id), "Id", "Name");
             }
 
-            //ViewData["DeveloperUserId"] = new SelectList(_context.Users, "Id", "Id");
-            //ViewData["OwnerUserId"] = new SelectList(_context.Users, "Id", "Id");
-            //ViewData["ProjectId"] = new SelectList(_context.Projects, "Id", "Description");
-            //ViewData["TicketStatusId"] = new SelectList(await _lookupService.GetTicketPrioritiesAsync(), "Id", "Name");
 
             ViewData["TicketPriorityId"] = new SelectList(await _lookupService.GetTicketTypesAsync(), "Id", "Name");
             ViewData["TicketTypeId"] = new SelectList(await _lookupService.GetTicketTypesAsync(), "Id", "Name");
@@ -315,7 +311,6 @@ namespace AtlasTracker.Controllers
                 }
                 catch (Exception)
                 {
-
                     throw;
                 }
 

@@ -201,14 +201,6 @@ namespace AtlasTracker.Services
         #endregion
 
 
-        #region
-        public Task<List<Project>> GetAllProjectsByPriority(int companyId, string priorityName)
-        {
-            throw new NotImplementedException();
-        }
-
-        #endregion
-
         #region Get All Projects By Priority
         public async Task<List<Project>> GetAllProjectsByPriorityAsync(int companyId, string priorityName)
         {

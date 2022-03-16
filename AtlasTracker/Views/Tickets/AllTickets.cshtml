@@ -7,11 +7,25 @@
     ViewData["Title"] = "AllTickets";
 }
 
-<h1>All Tickets</h1>
+<header class="page-header">
+    <h2>All Tickets</h2>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
+    <div class="right-wrapper text-end">
+        <ol class="breadcrumbs">
+            <li>
+                <a asp-action="Dashboard" asp-controller="Home">
+                    <i class="bx bx-home-alt"></i>
+                </a>
+            </li>
+
+            <li><span>All Tickets</span></li>
+
+        </ol>
+
+        <a class="sidebar-right-toggle" data-open="sidebar-right"><i class="fas fa-chevron-left"></i></a>
+    </div>
+</header>
+
 
 <div class="row">
     <div class="col-md-12">
