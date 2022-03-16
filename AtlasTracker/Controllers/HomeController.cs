@@ -40,6 +40,11 @@ namespace AtlasTracker.Controllers
             return View();
         }
 
+        public async Task<IActionResult> Landing()
+        {
+            return View();
+        }
+
         public IActionResult Privacy()
         {
             return View();
