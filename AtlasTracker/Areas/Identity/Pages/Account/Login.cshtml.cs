@@ -104,7 +104,7 @@ namespace AtlasTracker.Areas.Identity.Pages.Account
 
         public async Task<IActionResult> OnPostAsync(string returnUrl = null)
         {
-            returnUrl ??= Url.Content("~/Home/Dashboard");
+            returnUrl ??= Url.Content("~/Home/Default");
 
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
 
