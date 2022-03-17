@@ -256,11 +256,19 @@
                 <div id="userbox" class="userbox">
                     <a href="#" data-bs-toggle="dropdown">
                         <figure class="profile-picture">
-                            <img src="~/Template/img/!logged-user.jpg" alt="Joseph Doe" class="rounded-circle" data-lock-picture="img/!logged-user.jpg" />
+                            @if (btUser.AvatarData != null)
+                            {
+                                <img class="avatar-img" src="data:image/*;base64,@(Convert.ToBase64String(btUser.AvatarData))" alt="">
+                            }
+                            else
+                            {
+                                <img class="rounded-circle" style="width:40px;height:auto;" src="https://cdn.icon-icons.com/icons2/1378/PNG/512/avatardefault_92824.png" alt="">
+                            }
+                            @*<img src="~/Template/img/!logged-user.jpg" alt="Joseph Doe" class="rounded-circle" data-lock-picture="img/!logged-user.jpg" />*@
                         </figure>
                         <div class="profile-info" data-lock-name="John Doe" data-lock-email="johndoe@okler.com">
-                            <span class="name"></span>
-                            <span class="role">@(await UserManager.GetRolesAsync(btUser)).FirstOrDefault()</span>
+                            <span class="name">@((UserManager.GetUserName(User)))</span>
+                            <span class="role">@((await UserManager.GetRolesAsync(btUser)).FirstOrDefault())</span>
                         </div>
 
                         <i class="fa custom-caret"></i>
@@ -270,11 +278,11 @@
                         <ul class="list-unstyled mb-2">
                             <li class="divider"></li>
                             <li>
-                                <a role="menuitem" tabindex="-1" href="pages-user-profile.html"><i class="bx bx-user-circle"></i> My Profile</a>
+                                <a role="menuitem" tabindex="-1" asp-area="Identity" asp-page="/Account/Manage/Index"><i class="bx bx-user-circle"></i> My Profile</a>
                             </li>
-                            <li>
+                            @*<li>
                                 <a role="menuitem" tabindex="-1" href="#" data-lock-screen="true"><i class="bx bx-lock"></i> Lock Screen</a>
-                            </li>
+                            </li>*@
                             <li>
                                 <a role="menuitem" tabindex="-1" href="pages-signin.html"><i class="bx bx-power-off"></i> Logout</a>
                             </li>

@@ -1,101 +1,61 @@
-﻿@model IEnumerable<AtlasTracker.Models.Invite>
+﻿@page
+@using AtlasTracker.Areas.Identity.Pages.Account
+@model RegisterByInviteModel
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Register By Invite";
 }
 
-<h1>Index</h1>
+<h1>@ViewData["Title"]</h1>
+<div class="row">
+    <div class="col-md-4">
+        <form asp-route-returnUrl="@Model.ReturnUrl" method="post">
+            <input hidden asp-for="Input.CompanyId" />
+            <input hidden asp-for="Input.ProjectId" />
+            <h4>Create a new account.</h4>
+            <hr />
+            <div asp-validation-summary="All" class="text-danger"></div>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.InviteDate)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.JoinDate)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.CompanyToken)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.InviteeEmail)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.InviteeFirstName)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.InviteeLastName)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Message)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.IsValid)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Company)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Invitor)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Invitee)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Project)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model!) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.InviteDate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.JoinDate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.CompanyToken)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.InviteeEmail)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.InviteeFirstName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.InviteeLastName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Message)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.IsValid)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Company!.Name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Invitor!.Id)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Invitee!.Id)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Project!.Description)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
-        </tr>
+            <div class="form-group">
+                <label asp-for="Input.Company" class="control-label"></label>
+                <input asp-for="Input.Company" class="form-control" disabled />
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Input.Email"></label>
+                <input asp-for="Input.Email" class="form-control" />
+                <span asp-validation-for="Input.Email" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Input.FirstName"></label>
+                <input asp-for="Input.FirstName" class="form-control" />
+                <span asp-validation-for="Input.FirstName" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Input.LastName"></label>
+                <input asp-for="Input.LastName" class="form-control" />
+                <span asp-validation-for="Input.LastName" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Input.Password"></label>
+                <input asp-for="Input.Password" class="form-control" />
+                <span asp-validation-for="Input.Password" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Input.ConfirmPassword"></label>
+                <input asp-for="Input.ConfirmPassword" class="form-control" />
+                <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
+            </div>
+
+            <button type="submit" class="btn btn-primary">Register</button>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+<partial name="_ValidationScriptsPartial" />
 }
-    </tbody>
-</table>

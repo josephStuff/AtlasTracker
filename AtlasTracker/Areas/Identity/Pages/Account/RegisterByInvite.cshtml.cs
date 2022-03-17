@@ -39,6 +39,7 @@ namespace AtlasTracker.Areas.Identity.Pages.Account
         private readonly IEmailSender _emailSender;
         private readonly IBTProjectService _projectService;
         private readonly IBTInviteService _inviteService;
+
         public RegisterByInviteModel(
         UserManager<BTUser> userManager,
         IUserStore<BTUser> userStore,
@@ -192,13 +193,10 @@ namespace AtlasTracker.Areas.Identity.Pages.Account
             ReturnUrl = returnUrl;
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
 
-
-
             //Use "id" to find the invite
             Invite invite = await _inviteService.GetInviteAsync(id, companyId);
+
             //Load Inputmodel with Invite information according to inviteId
-
-
 
             Input.Email = invite.InviteeEmail;
             Input.FirstName = invite.InviteeFirstName;
@@ -206,8 +204,6 @@ namespace AtlasTracker.Areas.Identity.Pages.Account
             Input.Company = invite.Company.Name;
             Input.CompanyId = invite.CompanyId;
             Input.ProjectId = invite.ProjectId;
-
-
 
         }
 
