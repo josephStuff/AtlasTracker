@@ -300,8 +300,8 @@ namespace AtlasTracker.Controllers
                 ViewData["ProjectId"] = new SelectList(await _projectService.GetUserProjectsAsync(btUser.Id), "Id", "Name");
             }
 
-
             ViewData["TicketPriorityId"] = new SelectList(await _lookupService.GetTicketTypesAsync(), "Id", "Name");
+            ViewData["TicketStatusId"] = new SelectList(await _lookupService.GetTicketTypesAsync(), "Id", "Name");
             ViewData["TicketTypeId"] = new SelectList(await _lookupService.GetTicketTypesAsync(), "Id", "Name");
 
             return View();

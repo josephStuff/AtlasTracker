@@ -38,6 +38,7 @@ namespace AtlasTracker.Services.Interfaces
 
                 throw;
             }
+            throw new NotImplementedException();
         }
 
         public async Task<List<TicketStatus>> GetTicketStatusesAsync()
@@ -51,6 +52,7 @@ namespace AtlasTracker.Services.Interfaces
 
                 throw;
             }
+            throw new NotImplementedException();
         }
 
         public async Task<List<TicketType>> GetTicketTypesAsync()
