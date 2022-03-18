@@ -7,11 +7,23 @@
     ViewData["Title"] = "AllProjects";
 }
 
-<h1>All Projects</h1>
+<header class="page-header">
+    <h2>Projects</h2>
+    <div class="right-wrapper text-end">
+        <ol class="breadcrumbs">
+            <li>
+                <a>
+                    <i class="bx bx-home-alt"></i>
+                </a>
+            </li>
+            <li><span>New Layout</span></li>
+            <li><span>Dashboard</span></li>
+        </ol>
+        <a class="sidebar-right-toggle" data-open="sidebar-right"><i class="fas fa-chevron-left"></i></a>
+    </div>
+</header>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
+
 <table class="table">
     <thead>
         <tr>
@@ -29,16 +41,10 @@
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.EndDate)
-            </th>
+            </th>            
             <th>
-                @Html.DisplayNameFor(model => model.ImageFileName)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ImageFileData)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ImageContentType)
-            </th>
+                Image
+            </th>            
             <th>
                 @Html.DisplayNameFor(model => model.Archived)
             </th>
@@ -68,7 +74,9 @@
                 <td>
                     @Html.DisplayFor(modelItem => item.EndDate)
                 </td>
-                
+                <td>
+                    @Html.DisplayFor(modelItem => item.ImageFileData)
+                </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.Archived)
                 </td>

@@ -7,11 +7,23 @@
     ViewData["Title"] = "Index";
 }
 
-<h1>My Projects</h1>
+<header class="page-header">
+    <h2>My Projects</h2>
+    <div class="right-wrapper text-end">
+        <ol class="breadcrumbs">
+            <li>
+                <a>
+                    <i class="bx bx-home-alt"></i>
+                </a>
+            </li>
+            <li><span>Layout</span></li>
+            <li><span>Dashboard</span></li>
+        </ol>
+        <a class="sidebar-right-toggle" data-open="sidebar-right"><i class="fas fa-chevron-left"></i></a>
+    </div>
+</header>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
+
 <table class="table">
     <thead>
         <tr>

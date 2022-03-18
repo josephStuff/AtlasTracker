@@ -33,8 +33,8 @@
     </div>
     <div class="col-md-3">
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <label asp-for="Input.AvatarData" style="width: 100%;"></label>
         <div class="form-floating">
-            <label asp-for="Input.AvatarData" style="width: 100%;"></label>
             @if (Model.Input.AvatarData != null)
             {
                 <img id="avatarFileData" class="img-fluid img-thumbnail rounded" src="data:image/*;base64,@(Convert.ToBase64String(Model.Input.AvatarData))">

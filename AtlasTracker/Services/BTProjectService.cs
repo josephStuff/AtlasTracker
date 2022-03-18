@@ -25,13 +25,14 @@ namespace AtlasTracker.Services
             try
             {
                 _context.Add(project);
-                await _context.SaveChangesAsync();
+                //await _context.SaveChangesAsync();                
             }
             catch (Exception)
             {
 
                 throw;
             }
+
         }
 
         #endregion

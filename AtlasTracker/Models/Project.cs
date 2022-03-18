@@ -15,14 +15,14 @@ namespace AtlasTracker.Models
         // ---------------- NAME ------------------------------- <
         [Required]
         [StringLength(240, ErrorMessage = "The {0} must be at least {2} at most {1} characters long.", MinimumLength = 2)]
-        [DisplayName("Project Name")]
+        [DisplayName("Name")]
         public string? Name { get; set; }
 
 
         // ----------------- DESCRIPTION ------------------- <
         [Required]
         [StringLength(2000, ErrorMessage = "The {0} must be at least {2} at most {1} characters long.", MinimumLength = 2)]
-        [DisplayName("Project Name")]
+        [DisplayName("Description")]
         public string? Description { get; set; }
 
 
@@ -33,12 +33,12 @@ namespace AtlasTracker.Models
         public DateTimeOffset CreatedDate { get; set; }
 
                 
-        [DisplayName("Project Start Date")]
+        [DisplayName("Start Date")]
         [DataType(DataType.Date)]
         public DateTimeOffset StartDate { get; set; }
 
                 
-        [DisplayName("Project End Date")]
+        [DisplayName("End Date")]
         [DataType(DataType.Date)]
         public DateTimeOffset EndDate { get; set; }
 
@@ -62,7 +62,6 @@ namespace AtlasTracker.Models
         public string? ImageContentType { get; set; }
 
         public bool Archived { get; set; }
-
 
         
         // --------- NAVIGATION PROPERTIES ------------------------ <

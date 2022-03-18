@@ -1,9 +1,6 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 #nullable disable
-
-
-
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -21,8 +18,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
-
-
+using AtlasTracker.Data;
+using AtlasTracker.Models.Enums;
 
 namespace AtlasTracker.Areas.Identity.Pages.Account
 {
@@ -34,15 +31,14 @@ namespace AtlasTracker.Areas.Identity.Pages.Account
         private readonly IUserEmailStore<BTUser> _emailStore;
         private readonly ILogger<RegisterModel> _logger;
         private readonly IEmailSender _emailSender;
-
-
+        private readonly ApplicationDbContext _context;
 
         public RegisterModel(
         UserManager<BTUser> userManager,
         IUserStore<BTUser> userStore,
         SignInManager<BTUser> signInManager,
         ILogger<RegisterModel> logger,
-        IEmailSender emailSender)
+        IEmailSender emailSender, ApplicationDbContext context)
         {
             _userManager = userManager;
             _userStore = userStore;
@@ -50,6 +46,7 @@ namespace AtlasTracker.Areas.Identity.Pages.Account
             _signInManager = signInManager;
             _logger = logger;
             _emailSender = emailSender;
+            _context = context;
         }
 
 
@@ -95,9 +92,6 @@ namespace AtlasTracker.Areas.Identity.Pages.Account
             public string Email { get; set; }
 
 
-
-
-
             /// <summary>
             /// This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
             /// directly from your code. This API may change or be removed in future releases.
@@ -109,7 +103,6 @@ namespace AtlasTracker.Areas.Identity.Pages.Account
             public string Password { get; set; }
 
 
-
             /// <summary>
             /// This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
             /// directly from your code. This API may change or be removed in future releases.
@@ -118,9 +111,24 @@ namespace AtlasTracker.Areas.Identity.Pages.Account
             [Display(Name = "Confirm password")]
             [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
             public string ConfirmPassword { get; set; }
+
+            [Required]
+            [Display(Name ="First Name")]
+            public string  FirstName { get; set; }
+
+            [Required]
+            [Display(Name = "Last Name")]
+            public string LastName { get; set; }
+
+            [Required]
+            [Display(Name = "company Name")]
+            public string CompanyName { get; set; }
+
+            [Required]
+            [Display(Name = "Company Description")]
+            public string CompanyDescription{ get; set; }
+
         }
-
-
 
 
         public async Task OnGetAsync(string returnUrl = null)
@@ -137,21 +145,28 @@ namespace AtlasTracker.Areas.Identity.Pages.Account
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
             if (ModelState.IsValid)
             {
-                var user = CreateUser();
 
+                Company company = new()
+                {
+                    Name = Input.CompanyName,
+                    Description = Input.CompanyDescription
+                };
+                await _context.AddAsync(company);
+                await _context.SaveChangesAsync();
+
+                // CREATE  new user ------------------------------- <
+                var user = CreateUser();   //  company.Id
 
 
                 await _userStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
                 await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
                 var result = await _userManager.CreateAsync(user, Input.Password);
 
-
-
                 if (result.Succeeded)
                 {
                     _logger.LogInformation("User created a new account with password.");
 
-
+                    await _userManager.AddToRoleAsync(user, nameof(BTRole.Admin));
 
                     var userId = await _userManager.GetUserIdAsync(user);
                     var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
@@ -161,7 +176,6 @@ namespace AtlasTracker.Areas.Identity.Pages.Account
                     pageHandler: null,
                     values: new { area = "Identity", userId = userId, code = code, returnUrl = returnUrl },
                     protocol: Request.Scheme);
-
 
 
                     await _emailSender.SendEmailAsync(Input.Email, "Confirm your email",

@@ -11,7 +11,14 @@
     @if (SignInManager.IsSignedIn(User))
     {
         <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle" id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
-            <img src="https://cdn.icon-icons.com/icons2/1378/PNG/512/avatardefault_92824.png" alt="" width="28" height="28" class="rounded-circle">
+            @if (Model!.Input.AvatarData != null)
+            {
+                <img id="avatarFileData" width="48" height:auto; class="rounded-circle" src="data:image/*;base64,@(Convert.ToBase64String(Model.Input.AvatarData))">
+            }
+            else
+            {
+                <img id="avatarFileData" width="48" height:auto; class="rounded-circle" style="object-fit:cover" src="https://cdn.icon-icons.com/icons2/1378/PNG/512/avatardefault_92824.png">
+            }
             <span class="d-none d-sm-inline mx-1">@btUser.FirstName</span>
         </a>
         <ul class="dropdown-menu dropdown-menu-dark text-small shadow" aria-labelledby="dropdownUser1">
