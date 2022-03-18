@@ -28,7 +28,7 @@ namespace AtlasTracker.Controllers
         private readonly IBTLookupService _lookupService;
         private readonly IBTFileService _fileService;
         private readonly IBTTicketHistoryService _ticketHistoryService;
-        private readonly IBTNotificationService _notificationService;
+        private readonly IBTNotificationService _notificationService;        
 
 
         public TicketsController(ApplicationDbContext context, IBTTicketService ticketService, IBTCompanyInfoService companyInfoService,
@@ -255,15 +255,11 @@ namespace AtlasTracker.Controllers
 
         // GET: Tickets/Details/5
         public async Task<IActionResult> Details(int? ticketId)
-        {
+        {                        
+
             try
             {
-                var ticket = await _context.Tickets.Include(t => t.DeveloperUser).Include(t => t.OwnerUser)
-                                                   .Include(t => t.Project).Include(t => t.TicketPriority)
-                                                   .Include(t => t.TicketStatus).Include(t => t.TicketType)
-                                                   .Include(t => t.Comments).Include(t => t.Attachments)
-                                                   .Include(t => t.History)
-                                                   .FirstOrDefaultAsync(t => t.Id == ticketId);
+                var ticket = await _ticketService.GetTicketByIdAsync(ticketId.Value);
 
             }
             catch (Exception)
@@ -271,19 +267,15 @@ namespace AtlasTracker.Controllers
 
                 throw;
             }
-            if (ticketId == null)
-            {
-                return NotFound();
-            }
-
-            //Ticket ticket = 
 
             if (ticketId == null)
             {
                 return NotFound();
             }
 
-            return View(ticketId);
+            ViewData["TicketPriorityId"] = new SelectList(await _lookupService.GetProjectPrioritiesAsync(), "Id", "Name", ticket.TicketPriorityId);
+
+            return View();
         }
 
         // GET: Tickets/Create

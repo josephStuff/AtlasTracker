@@ -13,10 +13,23 @@
 @{
     ViewData["Title"] = "Details";
     BTUser btUser = await UserManager.GetUserAsync(User);
-    BTUser projectManager = await ProjectService.GetProjectManagerAsync(Model!.ProjectId);
+    //BTUser projectManager = await ProjectService.GetProjectManagerAsync(Model!.ProjectId);
 }
 
-<h1>Ticket Details</h1>
+<header class="page-header">
+    <h2>Tickets Details</h2>
+    <div class="right-wrapper text-end">
+        <ol class="breadcrumbs">
+            <li>
+                <a>
+                    <i class="bx bx-home-alt"></i>
+                </a>
+            </li>
+            <li><span>Details</span></li>
+        </ol>
+        <a class="sidebar-right-toggle" data-open="sidebar-right"><i class="fas fa-chevron-left"></i></a>
+    </div>
+</header>
 
 <div>
     <div classxfont-weight eighteightgetainer-fluid>
@@ -81,7 +94,7 @@
                                 @*Form and Logic for authorized users to add comments*@
                                 <form class="form-horizontal form-bordered" asp-action="AddTicketComment" asp-controller="Tickets" method="post">
                                     <input type="hidden" asp-for="Id" name="TicketId" />
-                                    @if (Model.DeveloperUserId == btUser.Id || Model.OwnerUserId == btUser.Id || projectManager?.Id == btUser.Id || User.IsInRole(nameof(BTRole.Admin)))
+                                    @if (Model.DeveloperUserId == btUser.Id || Model.OwnerUserId == btUser.Id || User.IsInRole(nameof(BTRole.Admin)))   @*projectManager?.Id == btUser.Id || *@
                                     {
                                         <div class="form-group">
                                             <textarea id="editor" asp-for="@(new TicketComment().Comment)" rows="8" class="form-control" required placeholder="Add comment ..."></textarea>
