@@ -27,40 +27,42 @@
 <div class="row">
     <div class="col-md-4">
         <form asp-action="Create">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div asp-validation-summary="ModelOnly" class="text-danger" method="post"></div>
 
             <div class="form-group">
-                <label asp-for="Title" class="control-label"></label>
+                <label asp-for="Title" class="control-label">Title</label>
                 <input asp-for="Title" class="form-control" />
                 <span asp-validation-for="Title" class="text-danger"></span>
             </div>
 
             <div class="form-group">
-                <label asp-for="Description" class="control-label"></label>
+                <label asp-for="Description" class="control-label">Description</label>
                 <input asp-for="Description" class="form-control" />
                 <span asp-validation-for="Description" class="text-danger"></span>
             </div>
-                        
+
             <div class="form-group">
-                <label asp-for="ProjectId" class="control-label"></label>
-                <select asp-for="ProjectId" class ="form-control" asp-items="ViewBag.ProjectId"></select>
+                <label asp-for="Project" class="control-label"></label>
+                <select asp-for="Project" class ="form-control" asp-items="@ViewBag.Projects"></select>
+                <span asp-validation-for="Project" class="text-danger"></span>
             </div>
 
             <div class="form-group">
-                <label asp-for="TicketPriorityId" class="control-label"></label>
-                <select asp-for="TicketPriorityId" class ="form-control" asp-items="ViewBag.TicketPriorityId"></select>                
+                <label asp-for="TicketPriorityId" class="control-label">Priority</label>
+                <select asp-for="TicketPriorityId" class ="form-control" asp-items="@ViewBag.TicketPriorityId"></select>
+                <span asp-validation-for="TicketPriorityId" class="text-danger"></span>
             </div>
 
             <div class="form-group">
-                <label asp-for="TicketTypeId" class="control-label"></label>
-                <select asp-for="TicketTypeId" class ="form-control" asp-items="ViewBag.TicketTypeId"></select>
+                <label asp-for="TicketTypeId" class="control-label">Type</label>
+                <select asp-for="TicketTypeId" class ="form-control" asp-items="@ViewBag.TicketTypeId"></select>
             </div>
             
             <div class="form-group">
-                <label asp-for="TicketStatusId" class="control-label"></label>
-                <select asp-for="TicketStatusId" class ="form-control" asp-items="ViewBag.TicketStatus"></select>
+                <label asp-for="TicketStatusId" class="control-label">Status</label>
+                <select asp-for="TicketStatusId" class ="form-control" asp-items="@ViewBag.TicketStatusId"></select>
             </div>
-                        
+
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />
             </div>

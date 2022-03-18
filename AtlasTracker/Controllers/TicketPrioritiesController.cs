@@ -36,6 +36,7 @@ namespace AtlasTracker.Controllers
 
             var ticketPriority = await _context.TicketPriorities
                 .FirstOrDefaultAsync(m => m.Id == id);
+
             if (ticketPriority == null)
             {
                 return NotFound();

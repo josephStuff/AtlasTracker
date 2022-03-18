@@ -255,11 +255,17 @@ namespace AtlasTracker.Controllers
 
         // GET: Tickets/Details/5
         public async Task<IActionResult> Details(int? ticketId)
-        {                        
+        {
+            if (ticketId == null)
+            {
+                return NotFound();
+            }
+
+            Ticket ticket = new();
 
             try
             {
-                var ticket = await _ticketService.GetTicketByIdAsync(ticketId.Value);
+               ticket = await _ticketService.GetTicketByIdAsync(ticketId.Value);
 
             }
             catch (Exception)
@@ -268,14 +274,13 @@ namespace AtlasTracker.Controllers
                 throw;
             }
 
-            if (ticketId == null)
+            if (ticket == null)
             {
                 return NotFound();
             }
 
-            ViewData["TicketPriorityId"] = new SelectList(await _lookupService.GetProjectPrioritiesAsync(), "Id", "Name", ticket.TicketPriorityId);
 
-            return View();
+            return View(ticket);
         }
 
         // GET: Tickets/Create
@@ -292,8 +297,9 @@ namespace AtlasTracker.Controllers
                 ViewData["ProjectId"] = new SelectList(await _projectService.GetUserProjectsAsync(btUser.Id), "Id", "Name");
             }
 
-            ViewData["TicketPriorityId"] = new SelectList(await _lookupService.GetTicketTypesAsync(), "Id", "Name");
-            ViewData["TicketStatusId"] = new SelectList(await _lookupService.GetTicketTypesAsync(), "Id", "Name");
+            ViewData["Projects"] = new SelectList(await _projectService.GetAllProjectsByCompanyAsync(btUser.CompanyId), "Id", "Name");
+            ViewData["TicketPriorityId"] = new SelectList(await _lookupService.GetTicketPrioritiesAsync(), "Id", "Name");
+            ViewData["TicketStatusId"] = new SelectList(await _lookupService.GetTicketStatusesAsync(), "Id", "Name");
             ViewData["TicketTypeId"] = new SelectList(await _lookupService.GetTicketTypesAsync(), "Id", "Name");
 
             return View();

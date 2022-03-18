@@ -2,7 +2,7 @@
 @using AtlasTracker.Models.Enums
 @using AtlasTracker.Services
 @using AtlasTracker.Services.Interfaces
-@using Microsoft.AspNetCore.Identity;
+@using Microsoft.AspNetCore.Identity
 
 @inject IBTFileService FileService
 @inject IBTTicketService TicketService
@@ -13,7 +13,7 @@
 @{
     ViewData["Title"] = "Details";
     BTUser btUser = await UserManager.GetUserAsync(User);
-    //BTUser projectManager = await ProjectService.GetProjectManagerAsync(Model!.ProjectId);
+    BTUser projectManager = await ProjectService.GetProjectManagerAsync(Model!.ProjectId);
 }
 
 <header class="page-header">
@@ -32,7 +32,7 @@
 </header>
 
 <div>
-    <div classxfont-weight eighteightgetainer-fluid>
+    <div class="font-weight eighteightgetainer-fluid">
         <div class="row gy-2">
             <div class="col-md-12 col">
                 <div class="row col-cols-2 mt-5 bg-secondary">

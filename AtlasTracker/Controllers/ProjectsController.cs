@@ -209,7 +209,7 @@ namespace AtlasTracker.Controllers
             // Your goal is to return the 'project' from the databse
             // with the Id equal to the parameter passed in.
             // This is the only modification necessary for this method/action.
-            
+
             var project = await _context.Projects
                 .Include(p => p.Company)
                 .Include(p => p.ProjectPriority)
@@ -222,7 +222,7 @@ namespace AtlasTracker.Controllers
             }
 
             return View(project);
-                        
+
         }
 
         [Authorize(Roles = "Admin, ProjectManager")]
