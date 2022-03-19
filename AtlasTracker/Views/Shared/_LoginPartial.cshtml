@@ -11,9 +11,9 @@
     @if (SignInManager.IsSignedIn(User))
     {
         <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle" id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
-            @if (Model!.Input.AvatarData != null)
+            @if (Model!.AvatarData != null)
             {
-                <img id="avatarFileData" width="48" height:auto; class="rounded-circle" src="data:image/*;base64,@(Convert.ToBase64String(Model.Input.AvatarData))">
+                <img id="avatarFileData" width="48" height:auto; class="rounded-circle" src="data:image/*;base64,@(Convert.ToBase64String(Model.AvatarData))">
             }
             else
             {
