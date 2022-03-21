@@ -71,7 +71,7 @@
                                 @*Project end date*@
                                 <li><strong>Deadline:</strong> <span class="">  @Model.Project.EndDate</</span></li>
                                 @*Ticket type*@
-                                <li><strong>Type:</strong> <span class="" >  @Model.TicketType</span></li>
+                                <li><strong>Type:</strong> <span class="">  @Model.TicketType</span></li>
                                 @*Ticket priority*@
                                 <li><strong>Priority:</strong> <span class="">  @Model.TicketPriority</span></li>
                                 @*Ticket status*@
@@ -217,8 +217,9 @@
             </div>
         </div>
     </div>
+</div>
 
-    <div>
-        <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |
-        <a asp-action="AllTickets">Back to List</a>
-    </div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |
+    <a asp-action="AllTickets">Back to List</a>
+</div>
