@@ -4977,6 +4977,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <TypeScriptCompile Include="wwwroot\Template\vendor\simple-line-icons\node_modules\less\test\file.ts" />
     <TypeScriptCompile Include="wwwroot\Template\vendor\simple-line-icons\node_modules\less\test\test-es6.ts" />
     <TypeScriptCompile Include="wwwroot\Template\vendor\simple-line-icons\node_modules\make-dir\index.d.ts" />
   </ItemGroup>
