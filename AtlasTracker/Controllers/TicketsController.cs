@@ -28,7 +28,7 @@ namespace AtlasTracker.Controllers
         private readonly IBTLookupService _lookupService;
         private readonly IBTFileService _fileService;
         private readonly IBTTicketHistoryService _ticketHistoryService;
-        private readonly IBTNotificationService _notificationService;        
+        private readonly IBTNotificationService _notificationService;
 
 
         public TicketsController(ApplicationDbContext context, IBTTicketService ticketService, IBTCompanyInfoService companyInfoService,
@@ -394,7 +394,7 @@ namespace AtlasTracker.Controllers
                 return NotFound();
             }
 
-            ViewData["TicketPriorityId"] = new SelectList(await _lookupService.GetProjectPrioritiesAsync(), "Id", "Name", ticket.TicketPriorityId);
+            ViewData["TicketPriorityId"] = new SelectList(await _lookupService.GetTicketPrioritiesAsync(), "Id", "Name", ticket.TicketPriorityId);
             ViewData["TicketStatusId"] = new SelectList(await _lookupService.GetTicketStatusesAsync(), "Id", "Name", ticket.TicketStatusId);
             ViewData["TicketTypeId"] = new SelectList(await _lookupService.GetTicketTypesAsync(), "Id", "Name", ticket.TicketTypeId);
             
@@ -487,7 +487,7 @@ namespace AtlasTracker.Controllers
             ViewData["TicketStatusId"] = new SelectList(await _lookupService.GetTicketStatusesAsync(), "Id", "Name", ticket.TicketStatusId);
             ViewData["TicketTypeId"] = new SelectList(await _lookupService.GetTicketTypesAsync(), "Id", "Name", ticket.TicketTypeId);
 
-            return View(ticket);
+            return RedirectToAction(nameof(Index));
         }
 
 
@@ -500,14 +500,10 @@ namespace AtlasTracker.Controllers
             }
 
             int companyId = User.Identity.GetCompanyId();
-            var ticket = await _ticketService.GetTicketByIdAsync(companyId);
+            var ticket = _ticketService.GetTicketByIdAsync(companyId);
 
-            if (ticket == null)
-            {
-                return NotFound();
-            }
 
-            return View(ticket);
+            return View(nameof(Archive));
         }
 
         // POST: Tickets/Archive/
@@ -522,7 +518,7 @@ namespace AtlasTracker.Controllers
             await _ticketService.ArchiveTicketAsync(ticket);
 
 
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction(nameof(AllTickets));
         }
 
 

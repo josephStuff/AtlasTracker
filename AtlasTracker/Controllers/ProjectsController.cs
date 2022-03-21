@@ -306,9 +306,8 @@ namespace AtlasTracker.Controllers
             {
                 model.PMList = new SelectList(await _rolesService.GetUsersInRoleAsync(nameof(BTRole.ProjectManager), companyId), "Id", "FullName");
             }
-            // Load SelectLists with data ie. PMList & PriorityList ----------------- <
 
-            
+            // Load SelectLists with data ie. PMList & PriorityList ----------------- <            
             model.PriorityList = new SelectList(await _lookupsService.GetProjectPrioritiesAsync(), "Id", "Name");
 
             return View(model);

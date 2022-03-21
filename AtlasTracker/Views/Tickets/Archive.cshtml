@@ -4,12 +4,25 @@
     ViewData["Title"] = "Archived";    
 }
 
-<h1>Archived</h1>
+<header class="page-header">
+    <h2>Archive</h2>
+    <div class="right-wrapper text-end">
+        <ol class="breadcrumbs">
+            <li>
+                <a>
+                    <i class="bx bx-home-alt"></i>
+                </a>
+            </li>
+            <li><span>Archive Ticket</span></li>
+        </ol>
+        <a class="sidebar-right-toggle" data-open="sidebar-right"><i class="fas fa-chevron-left"></i></a>
+    </div>
+</header>
 
 
-<h3>Are you sure you want to archive this?</h3>
+<h3>Are you sure you want to archive this ticket?</h3>
 <div>
-    <h4>Ticket</h4>
+    
     <hr />
     <dl class="row">
         <dt class = "col-sm-2">
@@ -53,7 +66,7 @@
     <form asp-action="Archive">
         <input type="hidden" asp-for="Id" />
         <input type="submit" value="Archive" class="btn btn-danger" /> |
-        <a asp-action="Index">Back to List</a>
+        <a asp-action="AllTickets">Back to List</a>
     </form>
 
 </div>

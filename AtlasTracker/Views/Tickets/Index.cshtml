@@ -14,8 +14,7 @@
     <div class="right-wrapper text-end">
         <ol class="breadcrumbs">
             <li><a><i class="bx bx-home-alt"></i></a></li>
-            <li><span>Layout</span></li>
-            <li><span>Dashboard</span></li>
+            <li><span>Home</span></li>            
         </ol>
         <a class="sidebar-right-toggle" data-open="sidebar-right"><i class="fas fa-chevron-left"></i></a>
     </div>
@@ -76,9 +75,10 @@
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.Created)
+                    <strong class="fw-bold">Updated</strong>
+                    <p class="text-center">(- @Html.DisplayFor(modelItem => item.Updated) -)</p>
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Updated)
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.Archived)
@@ -99,10 +99,10 @@
                     @Html.DisplayFor(modelItem => item.TicketStatus!.Name)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.OwnerUser!.Id)
+                    @Html.DisplayFor(modelItem => item.OwnerUser!.FullName)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.DeveloperUser!.Id)
+                    @Html.DisplayFor(modelItem => item.DeveloperUser!.FullName)
                 </td>
                 <td>
                     <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
