@@ -171,7 +171,7 @@ namespace AtlasTracker.Data.Migrations
                     Name = table.Column<string>(type: "character varying(240)", maxLength: 240, nullable: false),
                     Description = table.Column<string>(type: "character varying(2000)", maxLength: 2000, nullable: false),
                     CreatedDate = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
-                    StartDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    StartDate = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
                     EndDate = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
                     ProjectPriorityId = table.Column<int>(type: "integer", nullable: false),
                     ImageFileName = table.Column<string>(type: "text", nullable: true),

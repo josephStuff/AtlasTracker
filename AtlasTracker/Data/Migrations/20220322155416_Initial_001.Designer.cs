@@ -12,14 +12,14 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace AtlasTracker.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20220302175935_Initial_001")]
+    [Migration("20220322155416_Initial_001")]
     partial class Initial_001
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "6.0.2")
+                .HasAnnotation("ProductVersion", "6.0.3")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
@@ -302,7 +302,7 @@ namespace AtlasTracker.Data.Migrations
                     b.Property<int>("ProjectPriorityId")
                         .HasColumnType("integer");
 
-                    b.Property<DateTime>("StartDate")
+                    b.Property<DateTimeOffset>("StartDate")
                         .HasColumnType("timestamp with time zone");
 
                     b.HasKey("Id");

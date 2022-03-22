@@ -27,9 +27,9 @@
     </div>
 </header>
 
-<div class="row col-cols-2 mt-1 border border-2">
-    <div class="card col m-1 p-2 h-50">
-        <div class="body">
+<div class="row col-cols-2 mt-1 border border-2 border-dark">
+    <div class="card col m-1 p-2 ">
+        <div class="">
             @* Project Name*@
             <h5>@Model!.Name</h5>
             @* Project Description*@
@@ -44,7 +44,7 @@
                         var today = DateTime.Now;
                         var percent = today >= end ? 100 : today < start ? 0 : Math.Round((today.Subtract(start)) / (end.Subtract(start)) * 100);
                     }
-                    [Progress Bar code]
+                    
                     <div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: @percent%;">
                         @* Use Progress Bar code variable here*@
                         <span class="progress-value">@percent%</span>
@@ -59,7 +59,7 @@
                 <li>Start Date: <span class="">@Model.StartDate.ToString("MMM dd, yyyy")</span></li>
                 <li>Deadline: <span class="">@Model.EndDate.ToString("MMM dd, yyyy")</span></li>
                 <li>Priority: <span class="">@Model.ProjectPriority?.Name</span></li>
-                if() logic
+                @*if() logic*@
                 @if (today < end && today >= start)
                 {
                     <li>Status: <span class="fw-bold">Active</span></li>
