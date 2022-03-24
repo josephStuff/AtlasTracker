@@ -1,8 +1,4 @@
 ﻿#nullable disable
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -321,10 +317,9 @@ namespace AtlasTracker.Controllers
             {
                 try
                 {
-                    //ticket.Created = DateTime.UtcNow;
+                    
                     ticket.Created = DateTimeOffset.UtcNow;
-                    ticket.OwnerUserId = btUser.Id;
-                    //ticket.OwnerUserId = _userManager.GetUserId(User);
+                    ticket.OwnerUserId = btUser.Id;                    
                     ticket.TicketStatusId = (await _ticketService.LookupTicketStatusIdAsync(nameof(BTTicketStatus.New))).Value;
 
                     await _ticketService.AddNewTicketAsync(ticket);
@@ -406,12 +401,13 @@ namespace AtlasTracker.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Title,Description,ProjectId,TicketTypeId,TicketPriorityId")] Ticket ticket)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Title,Description,Created,ProjectId,TicketTypeId,TicketPriorityId,TicketStatusId,OwnerUserId,DeveloperUserId")] Ticket ticket)
         {
             if (id != ticket.Id)
             {
                 return NotFound();
             }
+                        
 
             if (ModelState.IsValid)
             {
@@ -420,6 +416,9 @@ namespace AtlasTracker.Controllers
 
                 try
                 {
+                    ticket.Created = DateTime.SpecifyKind(ticket.Created.Date, DateTimeKind.Utc);
+                    ticket.Updated = DateTime.UtcNow;  
+                    await _ticketService.UpdateTicketAsync(ticket);
 
                 }
 
@@ -439,8 +438,10 @@ namespace AtlasTracker.Controllers
                 await _ticketHistoryService.AddHistoryAsync(oldTicket, newTicket, btUser.Id);
 
                 // Ticket Edit notification
-                BTUser projectManager = await _projectService.GetProjectManagerAsync(ticket.ProjectId);
+                //Project projectId = _projectService.GetProjectByIdAsync(projectId, companyId);
+                //BTUser projectMembers = await _projectService.GetAllProjectMembersExceptPMAsync(ticket.ProjectId);
                 int companyId = User.Identity!.GetCompanyId()!;
+                BTUser projectManager = await _projectService.GetProjectManagerAsync(ticket.ProjectId);
                 Notification notification = new()
                 {
                     TicketId = ticket.Id,
@@ -480,14 +481,14 @@ namespace AtlasTracker.Controllers
                     await _notificationService.SendEmailNotificationAsync(devNotification, "Ticket Updated");
                 }
 
-                return RedirectToAction(nameof(AllTickets));
+                return RedirectToAction(nameof(Details),new { ticketId = ticket.Id });
             }
 
             ViewData["TicketPriorityId"] = new SelectList(await _lookupService.GetProjectPrioritiesAsync(), "Id", "Name", ticket.TicketPriorityId);
             ViewData["TicketStatusId"] = new SelectList(await _lookupService.GetTicketStatusesAsync(), "Id", "Name", ticket.TicketStatusId);
             ViewData["TicketTypeId"] = new SelectList(await _lookupService.GetTicketTypesAsync(), "Id", "Name", ticket.TicketTypeId);
 
-            return RedirectToAction(nameof(Edit));
+            return View(ticket);
         }
 
 
@@ -501,9 +502,9 @@ namespace AtlasTracker.Controllers
 
             int companyId = User.Identity.GetCompanyId();
             var ticket = _ticketService.GetTicketByIdAsync(companyId);
+            var ticketId = ticket.Result;
 
-
-            return View(nameof(Archive));
+            return View(ticketId);
         }
 
         // POST: Tickets/Archive/

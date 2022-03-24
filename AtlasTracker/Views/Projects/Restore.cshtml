@@ -4,7 +4,20 @@
     ViewData["Title"] = "Restore";
 }
 
-<h1>Restore</h1>
+<header class="page-header">
+    <h2>Projects Restore</h2>
+    <div class="right-wrapper text-end">
+        <ol class="breadcrumbs">
+            <li>
+                <a>
+                    <i class="bx bx-home-alt"></i>
+                </a>
+            </li>
+            <li><span>Restore</span></li>
+        </ol>
+        <a class="sidebar-right-toggle" data-open="sidebar-right"><i class="fas fa-chevron-left"></i></a>
+    </div>
+</header>
 
 <h3>Are you sure you want to restore this?</h3>
 <div>
@@ -73,9 +86,9 @@
         </dd>
     </dl>
     
-    <form asp-action="Index">
+    <form asp-action="AllProjects">
         <input type="hidden" asp-for="Id" />
         <input type="submit" value="Restore" class="btn btn-outline-success" /> |
-        <a asp-action="Archive">Back to List</a>
+        <a asp-action="ArchivedProjects">Back to List</a>
     </form>
 </div>

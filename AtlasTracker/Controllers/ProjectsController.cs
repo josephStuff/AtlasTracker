@@ -1,8 +1,5 @@
 ﻿#nullable disable
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -50,19 +47,12 @@ namespace AtlasTracker.Controllers
             return View(projects);
         }
 
-        //  All Projects
+        //  GET: All Projects
         public async Task<IActionResult> AllProjects()
         {
             List<Project> projects = new();
             int companyId = User.Identity.GetCompanyId();
             
-
-            //if (ImageFormFile != null)
-            //{
-            //    model.Project.ImageFileData = await _fileService.ConvertFileToByteArrayAsync(model.Project.ImageFormFile);
-            //    model.Project.ImageFileName = model.Project.ImageFormFile.FileName;
-            //    model.Project.ImageContentType = model.Project.ImageFormFile.ContentType;
-            //}
 
             if (User.IsInRole(nameof(BTRole.Admin)) || User.IsInRole(nameof(BTRole.ProjectManager)))
             {
@@ -77,15 +67,7 @@ namespace AtlasTracker.Controllers
             return View(projects);
         }
 
-        //  ArchivedProjects
-        public async Task<IActionResult> ArchivedProjects()
-        {
-            int companyId = User.Identity.GetCompanyId();
-            List<Project> projects = await _projectService.GetArchivedProjectsByCompanyAsync(companyId);
-
-            return View(projects);
-        }
-
+        
         //  UnassignedProjects
         public async Task<IActionResult> UnassignedProjects()
         {
@@ -325,12 +307,12 @@ namespace AtlasTracker.Controllers
             {
                 try
                 {
-                    if (model.Project.ImageFormFile != null)
-                    {
-                        model.Project.ImageFileData = await _fileService.ConvertFileToByteArrayAsync(model.Project.ImageFormFile);
-                        model.Project.ImageFileName = model.Project.ImageFormFile.FileName;
-                        model.Project.ImageContentType = model.Project.ImageFormFile.ContentType;
-                    }
+                    //if (model.Project.ImageFormFile != null)
+                    //{
+                    //    model.Project.ImageFileData = await _fileService.ConvertFileToByteArrayAsync(model.Project.ImageFormFile);
+                    //    model.Project.ImageFileName = model.Project.ImageFormFile.FileName;
+                    //    model.Project.ImageContentType = model.Project.ImageFormFile.ContentType;
+                    //}
 
                     // format dates  (created , start & end)
                     model.Project.CreatedDate = DateTime.SpecifyKind(model.Project.CreatedDate.DateTime, DateTimeKind.Utc);
@@ -345,6 +327,8 @@ namespace AtlasTracker.Controllers
                         await _projectService.AddProjectManagerAsync(model.PMID, model.Project.Id);
                     }
 
+                    await _projectService.UpdateProjectAsync(model.Project);
+                                        
                     return RedirectToAction("AllProjects");
                 }
 
@@ -399,7 +383,16 @@ namespace AtlasTracker.Controllers
             await _projectService.ArchiveProjectAsync(project);
 
 
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction(nameof(ArchivedProjects));
+        }
+
+        //  ArchivedProjects
+        public async Task<IActionResult> ArchivedProjects()
+        {
+            int companyId = User.Identity.GetCompanyId();
+            List<Project> projects = await _projectService.GetArchivedProjectsByCompanyAsync(companyId);
+
+            return View(projects);
         }
 
         // GET: Projects/Restore/
