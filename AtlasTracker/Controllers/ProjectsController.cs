@@ -52,6 +52,7 @@ namespace AtlasTracker.Controllers
         {
             List<Project> projects = new();
             int companyId = User.Identity.GetCompanyId();
+            //_context.Projects.OrderByDescending(p => p.Name);
             
 
             if (User.IsInRole(nameof(BTRole.Admin)) || User.IsInRole(nameof(BTRole.ProjectManager)))
@@ -105,7 +106,7 @@ namespace AtlasTracker.Controllers
         }
 
         [HttpPost]
-        [ValidateAntiForgeryTokenAttribute]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> AssignPM(AssignPMViewModel model)
         {
             // Add PM if one was chosen
@@ -289,7 +290,7 @@ namespace AtlasTracker.Controllers
                 model.PMList = new SelectList(await _rolesService.GetUsersInRoleAsync(nameof(BTRole.ProjectManager), companyId), "Id", "FullName");
             }
 
-            // Load SelectLists with data ie. PMList & PriorityList ----------------- <            
+            // Load SelectLists with data ie. PMList & PriorityList ----------------- <
             model.PriorityList = new SelectList(await _lookupsService.GetProjectPrioritiesAsync(), "Id", "Name");
 
             return View(model);
@@ -328,7 +329,7 @@ namespace AtlasTracker.Controllers
                     }
 
                     await _projectService.UpdateProjectAsync(model.Project);
-                                        
+
                     return RedirectToAction("AllProjects");
                 }
 
@@ -414,7 +415,37 @@ namespace AtlasTracker.Controllers
             return View(project);
         }
 
+        // GET: Projects/History/
+        //public async Task<IActionResult> ProjectHistories(int? id)
+        //{
+            //if (ModelState.IsValid)
+            //{
+            //    _context.Add(ticketHistory);
+            //    await _context.SaveChangesAsync();
+            //    return RedirectToAction(nameof(Index));
+            //}
+            //ViewData["TicketId"] = new SelectList(_context.Tickets, "Id", "Description", ticketHistory.TicketId);
+            //ViewData["UserId"] = new SelectList(_context.Users, "Id", "Id", ticketHistory.UserId);
+            //return View(ticketHistory);
+
+            //if (id == null)
+            //{
+            //    return NotFound();
+            //}
+
+            //int companyId = User.Identity.GetCompanyId();
+            //var project = await _projectService.GetProjectByIdAsync(id.Value, companyId);
+
+            //if (project == null)
+            //{
+            //    return NotFound();
+            //}
+
+            //return View(project);
+        //}
+
         // POST: Projects/Restore/5
+
         [HttpPost, ActionName("Restore")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> RestoreConfirmed(int id)

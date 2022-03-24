@@ -2,7 +2,6 @@
 using AtlasTracker.Models;
 using AtlasTracker.Models.Enums;
 using AtlasTracker.Services.Interfaces;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 namespace AtlasTracker.Services
@@ -10,7 +9,7 @@ namespace AtlasTracker.Services
     public class BTProjectService : IBTProjectService
     {
         private readonly ApplicationDbContext _context;
-        private readonly IBTRolesService _rolesService;        
+        private readonly IBTRolesService _rolesService;
 
         public BTProjectService(ApplicationDbContext context, IBTRolesService rolesService)
         {
@@ -25,7 +24,7 @@ namespace AtlasTracker.Services
             try
             {
                 _context.Add(project);
-                //await _context.SaveChangesAsync();                
+                await _context.SaveChangesAsync();
             }
             catch (Exception)
             {

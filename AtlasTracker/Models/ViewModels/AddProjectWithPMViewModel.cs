@@ -1,5 +1,4 @@
-﻿using AtlasTracker.Models;
-using Microsoft.AspNetCore.Mvc.Rendering;
+﻿using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace AtlasTracker.Models.ViewModels
 {

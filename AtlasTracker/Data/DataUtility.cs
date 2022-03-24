@@ -23,7 +23,6 @@ namespace AtlasTracker.Data
         private static int movieId;
 
 
-
         public static string GetConnectionString(IConfiguration configuration)
         {
             //The default connection string will come from appSettings like usual
@@ -132,7 +131,8 @@ namespace AtlasTracker.Data
                 FirstName = "Bill",
                 LastName = "Appuser",
                 EmailConfirmed = true,
-                CompanyId = company1Id
+                CompanyId = company1Id,
+                //AvatarData = "Url:~/"
             };
             try
             {

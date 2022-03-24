@@ -437,9 +437,7 @@ namespace AtlasTracker.Controllers
                 Ticket newTicket = await _ticketService.GetTicketAsNoTrackingAsync(ticket.Id);
                 await _ticketHistoryService.AddHistoryAsync(oldTicket, newTicket, btUser.Id);
 
-                // Ticket Edit notification
-                //Project projectId = _projectService.GetProjectByIdAsync(projectId, companyId);
-                //BTUser projectMembers = await _projectService.GetAllProjectMembersExceptPMAsync(ticket.ProjectId);
+                // Ticket Edit notification                
                 int companyId = User.Identity!.GetCompanyId()!;
                 BTUser projectManager = await _projectService.GetProjectManagerAsync(ticket.ProjectId);
                 Notification notification = new()
