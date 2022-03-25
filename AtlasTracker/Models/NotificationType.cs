@@ -11,6 +11,5 @@ namespace AtlasTracker.Models
         [DisplayName("Notification Type")]
         public string? Name { get; set; }
 
-
     }
 }

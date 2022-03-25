@@ -4,11 +4,21 @@
     ViewData["Title"] = "Index";
 }
 
-<h1>Index</h1>
+<header class="page-header">
+    <h2>Notifications</h2>
+    <div class="right-wrapper text-end">
+        <ol class="breadcrumbs">
+            <li>
+                <a>
+                    <i class="bx bx-home-alt"></i>
+                </a>
+            </li>
+            <li><span>Messages</span></li>
+        </ol>
+        <a class="sidebar-right-toggle" data-open="sidebar-right"><i class="fas fa-chevron-left"></i></a>
+    </div>
+</header>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
 <table class="table">
     <thead>
         <tr>
@@ -40,7 +50,7 @@
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
+@foreach (var item in Model!) {
         <tr>
             <td>
                 @Html.DisplayFor(modelItem => item.Title)
@@ -55,20 +65,15 @@
                 @Html.DisplayFor(modelItem => item.Viewed)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.NotificationType.Name)
+                @Html.DisplayFor(modelItem => item.NotificationType!.Name)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Ticket.Description)
+                @Html.DisplayFor(modelItem => item.Ticket!.Description)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Recipient.Id)
+                @Html.DisplayFor(modelItem => item.Sender!.FullName)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Sender.Id)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
                 <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
             </td>
         </tr>
