@@ -29,11 +29,11 @@
             <label asp-for="Input.PhoneNumber" class="form-label"></label>
             <span asp-validation-for="Input.PhoneNumber" class="text-danger"></span>
         </div>
-        <button id="update-profile-button" type="submit" class="w-100 btn btn-lg btn-primary">Save</button>
+        <button id="update-profile-button" type="submit" class="btn btn-sm btn-primary mt-2">Save</button>
     </div>
     <div class="col-md-3">
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-        <label asp-for="Input.AvatarData" style="width: 100%;"></label>
+        <label asp-for="Input.AvatarData" style="width: 45%;"></label>
         <div class="form-floating">
             @if (Model.Input.AvatarData != null)
             {
@@ -44,7 +44,7 @@
                 <img id="avatarFileData" class="img-fluid img-thumbnail rounded" style="object-fit:cover" src="https://cdn.icon-icons.com/icons2/1378/PNG/512/avatardefault_92824.png">
             }
             <input asp-for="Input.AvatarFormFile" class="form-control" type="file" accept=".png,.jpg,.jpeg,.gif"
-                   style="border:0px!important;padding: 0px;padding-top: 10px;padding-bottom: 30px;"
+                   style="border:1px!important;padding: 0px;padding-top: 10px;padding-bottom: 30px;"
                    onchange="document.getElementById('AvatarFileData').src = window.URL.createObjectURL(this.files[0])" />
             <span asp-validation-for="Input.AvatarFormFile" class="text-danger"></span>
         </div>
