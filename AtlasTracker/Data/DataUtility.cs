@@ -29,7 +29,7 @@ namespace AtlasTracker.Data
             var connectionString = configuration.GetConnectionString("DefaultConnection");
             //It will be automatically overwritten if we are running on Heroku
             var databaseUrl = Environment.GetEnvironmentVariable("DATABASE_URL");
-            return string.IsNullOrEmpty(databaseUrl) ? connectionString : BuildConnectionString(databaseUrl);
+            return string.IsNullOrEmpty(databaseUrl)? connectionString : BuildConnectionString(databaseUrl);
         }
 
         public static string BuildConnectionString(string databaseUrl)
