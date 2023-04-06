@@ -319,7 +319,7 @@ namespace AtlasTracker.Controllers
                 {
                     
                     ticket.Created = DateTimeOffset.UtcNow;
-                    ticket.OwnerUserId = btUser.Id;                    
+                    ticket.OwnerUserId = btUser.Id;
                     ticket.TicketStatusId = (await _ticketService.LookupTicketStatusIdAsync(nameof(BTTicketStatus.New))).Value;
 
                     await _ticketService.AddNewTicketAsync(ticket);
