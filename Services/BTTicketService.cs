@@ -13,7 +13,7 @@ namespace AtlasTracker.Services
         private readonly IBTRolesService _btRolesService;
         private readonly IBTProjectService _btProjectService;
 
-        public BTTicketService(ApplicationDbContext context, IBTRolesService btRolesService, 
+        public BTTicketService(ApplicationDbContext context, IBTRolesService btRolesService,
                                                                 IBTProjectService btProjectService)
         {
             _context = context;
